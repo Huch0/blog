@@ -1,5 +1,6 @@
 const express = require('express');
 const { isLoggedIn, isNotLoggedIn } = require('./is_logged_in');
+const { Post, User } = require('../models');
 
 const router = express.Router();
 
@@ -47,12 +48,23 @@ router.get('/:id', (req, res) => {
 
 
 
-router.get('/', (req, res, next) => {
-    const posts = [];
-    res.render('home', {
-        title: 'LiFE',
-        posts,
-    });
+router.get('/', async (req, res, next) => {
+    try {
+        const posts = await Post.findAll({
+            include: {
+                model: User,
+                attributes: ['id', 'nick'],
+            },
+            order: [['createdAt', 'DESC']],
+        });
+        res.render('home', {
+            title: 'LiFE',
+            posts: posts,
+        });
+    } catch (errror) {
+        console.error(error);
+        next(error);
+    }
 });
 
 module.exports = router;
