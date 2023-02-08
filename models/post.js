@@ -7,6 +7,10 @@ module.exports = class Post extends Sequelize.Model {
                 type: Sequelize.STRING(30),
                 allowNull: false,
             },
+            description: {
+                type: Sequelize.STRING(50),
+                allowNull: false,
+            },
             path: {
                 type: Sequelize.STRING(200),
                 allowNull: false,

@@ -4,24 +4,22 @@ const join_form = document.querySelector('#join_form');
 join_form.addEventListener('submit', event => {
     event.preventDefault();
 
-    const nick = event.target.elements.nick.value;
-    const email = event.target.elements.email.value;
-    const password = event.target.elements.password.value;
-    const checkbox = event.target.elements.checkbox.checked;
-    console.log(nick, email, password, checkbox);
+  const formData = new FormData(join_form);
+  const nick = formData.get("nick");
+  const email = formData.get("email");
+  const password = formData.get("password");
 
-    const formData = new FormData();
-    console.log(img, uploaded_imgs);
-    formData.append("nick", nick);
-    formData.append("email", email);
-    formData.append("password", password);
-
-    axios.post('/auth/join', formData)
-            .then((res) => {
-                console.log(res);
-            })
-            .catch((err) => {
-                console.error(err);
-            });
+  axios.post("/auth/join", {
+    nick,
+    email,
+    password
+  })
+  .then((res) => {
+    console.log(res);
+    window.location.replace('/');
+  })
+  .catch((error) => {
+    console.error(error);
+  });
 
 });

@@ -32,7 +32,7 @@ const upload = multer({
     limits: { fileSize: 5 * 1024 * 1024 },
 });
 // /upload.array('img', 12),
-router.post('/img', upload.array('img', 12), (req, res) => {
+router.post('/img', isLoggedIn, upload.array('img', 12), (req, res) => {
     console.log("POST /img successful");
 
     let imgUrls = [];
@@ -45,12 +45,13 @@ router.post('/img', upload.array('img', 12), (req, res) => {
 });
 
 const upload2 = multer();
-//isLoggedin 추가해야됨
-router.post('/', upload2.none(), async (req, res, next) => {
+
+router.post('/', isLoggedIn, upload2.none(), async (req, res, next) => {
     try {
         const content = req.body.content;
         const title = content.match(/<h1>(.*?)<\/h1>/)[1].replace(/<\/?h1>/g, '');
         const fileName = title + ".html";
+        //const filePath = 
         console.log(title, fileName, content);
 
         fs.writeFile(fileName, content, (err) => {

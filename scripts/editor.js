@@ -88,9 +88,6 @@ function createImgPreview(imgSrc, imgAlt, checkboxChecked) {
     return div;
 }
 
-// 이미지 본문 삽입 버튼
-const insert_img_btn = document.querySelector('#insert_img');
-
 /*
 insert_img_btn.addEventListener('click', event => {
     event.preventDefault();
@@ -116,17 +113,24 @@ insert_img_btn.addEventListener('click', event => {
 })
 */
 
-
-
-
-
+function changeValue(value) {
+    const btn = document.getElementById("category_dropdown");
+    btn.innerHTML = value;
+    console.log("Selected value:", value);
+  }
 
 // 게시글 작성 버튼 
 
 const submit_btn = document.querySelector("#submit_btn");
+
 submit_btn.addEventListener('click', event => {
     event.preventDefault();
-    
+
+    const title_input = document.querySelector("#title_input").value;
+    const description_input = document.querySelector("#description_input").value;
+    const category = document.querySelector('#category_dropdown').innerHTML;
+
+    console.log(title_input, description_input, category);
 
     // Get the data from the CKEditor 5 instance
     const data = ckeditor.getData();
