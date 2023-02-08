@@ -70,45 +70,27 @@
         <div class="jumbotron bg-light">
             <div>
                 <div class="input-group mb-3">
-                    <input id="img_input" type="file" class="form-control" id="inputGroupFile02" name="files" multiple accept=".jpg,.jpeg,.gif,.png,.mp4,.mov,.webm,.ogv,.webp,.bmp,.tif,.tiff,.heic,.avi,.mkv,.wmv,.asf,">
+                    <input id="img_input" type="file" class="form-control" id="inputGroupFile02" name="files" multiple
+                        accept=".jpg,.jpeg,.gif,.png,.mp4,.mov,.webm,.ogv,.webp,.bmp,.tif,.tiff,.heic,.avi,.mkv,.wmv,.asf,">
                     <button id="img_upload" class="input-group-text" for="inputGroupFile02">Upload</button>
                 </div>
             </div>
             <div class="container">
                 <!-- 이미지 미리보기-->
-                <div class="container d-flex flex-row flex-wrap bg-white">
-                    <div id="img_preview" class="preview_img mx-3">
-                        <img src="./img/Screenshot 2023-01-31 at 12.03.51 AM1675518808041.png" alt="" style="weight:60px;height:60px;">
-                        <input type="checkbox">
-                    </div>
-                    <div id="img_preview" class="preview_img mx-3">
-                        <img src="./img/Screenshot 2023-01-31 at 12.03.51 AM1675518808041.png" alt="" style="weight:60px;height:60px;">
-                        <input type="checkbox">
-                    </div>
-                    <div id="img_preview" class="preview_img mx-3">
-                        <img src="./img/Screenshot 2023-01-31 at 12.03.51 AM1675518808041.png" alt="" style="weight:60px;height:60px;">
-                        <input type="checkbox">
-                    </div>
-                    <div id="img_preview" class="preview_img mx-3">
-                        <img src="./img/Screenshot 2023-01-31 at 12.03.51 AM1675518808041.png" alt="" style="weight:60px;height:60px;">
-                        <input type="checkbox">
-                    </div>
-                    <div id="img_preview" class="preview_img mx-3">
-                        <img src="./img/Screenshot 2023-01-31 at 12.03.51 AM1675518808041.png" alt="" style="weight:60px;height:60px;">
-                        <input type="checkbox">
-                    </div>
-                    
+                <div id="img_container" class="container d-flex flex-row flex-wrap bg-white">
+
+
                 </div>
                 <div class="btn-group">
                     <button type="button" id="delete_img" class="btn btn-outline-secondary btn-sm">선택 삭제</button>
                     <button type="button" id="delete_all_imgs" class="btn btn-outline-secondary btn-sm">전체 삭제</button>
                 </div>
             </div>
-            
+
 
             <div class="container text-end">
                 <button type="button" class="btn btn-secondary">취소</button>
-                <button type="submit" class="btn btn-primary">작성</button>
+                <button id="submit_btn" type="button" class="btn btn-primary">작성</button>
             </div>
         </div>
 
@@ -123,6 +105,7 @@
             <script src="https://cdn.ckeditor.com/ckeditor5/36.0.0/super-build/translations/es.js"></script>
         -->
     <script>
+        var ckeditor;
         // This sample still does not showcase all CKEditor 5 features (!)
         // Visit https://ckeditor.com/docs/ckeditor5/latest/features/index.html to browse all the features.
         CKEDITOR.ClassicEditor.create(document.getElementById("editor"), {
@@ -264,7 +247,14 @@
                 // from a local file system (file://) - load this site via HTTP server if you enable MathType
                 'MathType'
             ]
-        });
+        })
+            .then(editor => {
+                console.log('Editor was initialized, editor');
+                ckeditor = editor;
+            })
+            .catch(error => {
+                console.error(error);
+            });
     </script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script type="text/javascript" src="../scripts/editor.js"></script>

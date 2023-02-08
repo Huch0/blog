@@ -41,16 +41,22 @@ img_upload_btn.addEventListener('click', event => {
     console.log(uploaded_imgs);
 
     const formData = new FormData();
-    
+
     for (let i = 0; i < uploaded_imgs.length; i++) {
         const img = uploaded_imgs[i];
         const formData = new FormData();
         console.log(img, uploaded_imgs);
         formData.append("img", img);
         console.log(formData);
+        const img_container = document.querySelector('#img_container');
+
         axios.post('/post/img', formData)
             .then((res) => {
                 console.log(res);
+                const prev_img = createImgPreview(res.data.url, res.data.url, 1);
+                console.log(prev_img);
+                img_container.appendChild(prev_img);
+
                 //document.getElementById('img-url').value = res.data.url;
                 //document.getElementById('img-preview').src = res.data.url;
                 //document.getElementById('img-preview').style.display = 'inline';
@@ -58,13 +64,34 @@ img_upload_btn.addEventListener('click', event => {
             .catch((err) => {
                 console.error(err);
             });
-    }   
+    }
 
 });
+function createImgPreview(imgSrc, imgAlt, checkboxChecked) {
+    const div = document.createElement("div");
+    div.id = "img_preview";
+    div.className = "preview_img mx-3";
+
+    const img = document.createElement("img");
+    img.src = imgSrc;
+    img.alt = imgAlt;
+    img.style.weight = "60px";
+    img.style.height = "60px";
+
+    const input = document.createElement("input");
+    input.type = "checkbox";
+    input.checked = checkboxChecked;
+
+    div.appendChild(img);
+    div.appendChild(input);
+
+    return div;
+}
 
 // 이미지 본문 삽입 버튼
 const insert_img_btn = document.querySelector('#insert_img');
 
+/*
 insert_img_btn.addEventListener('click', event => {
     event.preventDefault();
 
@@ -87,6 +114,7 @@ insert_img_btn.addEventListener('click', event => {
         }
     }
 })
+*/
 
 
 
@@ -94,22 +122,33 @@ insert_img_btn.addEventListener('click', event => {
 
 
 // 게시글 작성 버튼 
-form.addEventListener('submit', event => {
+
+const submit_btn = document.querySelector("#submit_btn");
+submit_btn.addEventListener('click', event => {
     event.preventDefault();
+    
 
     // Get the data from the CKEditor 5 instance
-    const data = editor.getData();
+    const data = ckeditor.getData();
+    //console.log(ckeditor);
 
+    //console.log(data);
     // Send the data to the server
     sendDataToServer(data);
 });
 
 function sendDataToServer(data) {
-    const xhr = new XMLHttpRequest();
-
-    xhr.open('POST', '/server/post');
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.send('data=' + encodeURIComponent(data));
-}
+    const formData = new FormData();
+        console.log(data);
+        formData.append('content', data);
+        axios.post('/post/', formData)
+          .then((res) => {
+            console.log('Post succeeded');
+            console.log(res);
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+};
 
 

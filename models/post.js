@@ -10,10 +10,6 @@ module.exports = class Post extends Sequelize.Model {
             path: {
                 type: Sequelize.STRING(200),
                 allowNull: false,
-            },
-            img_path: {
-                type: Sequelize.STRING(200),
-                allowNull: true,
             }
         }, {
             sequelize,

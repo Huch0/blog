@@ -15,7 +15,7 @@ router.get('/profile', isLoggedIn, (req, res) => {
 });
 
 router.get('/join', isNotLoggedIn, (req, res) => {
-    // 회원가입 페이지
+    res.render('join', { title: '회원가입' });
 });
 
 router.get('/getLicenseKey', isLoggedIn, (req, res) => {

@@ -7,6 +7,7 @@ const { Post } = require("../models");
 const { isLoggedIn } = require('./is_logged_in');
 const { hash } = require('bcrypt');
 const { post } = require('./page');
+const { title } = require('process');
 
 const router = express.Router();
 
@@ -44,12 +45,26 @@ router.post('/img', upload.array('img', 12), (req, res) => {
 });
 
 const upload2 = multer();
-router.post('/', isLoggedIn, upload2.none(), async (req, res, next) => {
+//isLoggedin 추가해야됨
+router.post('/', upload2.none(), async (req, res, next) => {
     try {
+        const content = req.body.content;
+        const title = content.match(/<h1>(.*?)<\/h1>/)[1].replace(/<\/?h1>/g, '');
+        const fileName = title + ".html";
+        console.log(title, fileName, content);
+
+        fs.writeFile(fileName, content, (err) => {
+            if (err) throw err;
+            console.log('HTML file was saved!');
+        });
+
+        console.log(title, content);
+
         const post = await Post.create({
-            content: req.body.content,
-            img: req.body.url,
-            UserId: req.user.id,
+            title: title,
+            path: './posts/' + fileName,
+            UserId: 0,
+            //UserId: req.user.id,
         });
         /*
         const hashtags = req.body.content.match(/#[^\s#]+/g);
