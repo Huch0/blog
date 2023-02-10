@@ -48,25 +48,23 @@
     </style>
     <div id="container">
         <div class="dropdown">
-            <button id="category_dropdown" class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Programming/Web
-            </button>
+            <button id="category_dropdown" class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Category</button>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#" onclick="changeValue('Programming')">Programming</a></li>
-              <li><a class="dropdown-item" href="#" onclick="changeValue('Web')">Web</a></li>
-              <li><a class="dropdown-item" href="#" onclick="changeValue('AI')">AI</a></li>
-              <li><a class="dropdown-item" href="#" onclick="changeValue('Math')">Math</a></li>
-              <li><a class="dropdown-item" href="#" onclick="changeValue('공학선형대수학')">공학선형대수학</a></li>
-              <li><a class="dropdown-item" href="#" onclick="changeValue('미분적분학')">미분적분학</a></li>
+              <li class="dropdown-item">Programming</li>
+              <li><a class="dropdown-item" href="#" onclick="changeValue('Web')">- Web</a></li>
+              <li><a class="dropdown-item" href="#" onclick="changeValue('AI')">- AI</a></li>
+              <li class="dropdown-item">Math</li>
+              <li><a class="dropdown-item" href="#" onclick="changeValue('공학선형대수학')">- 공학선형대수학</a></li>
+              <li><a class="dropdown-item" href="#" onclick="changeValue('미분적분학')">- 미분적분학</a></li>
             </ul>
           </div>
         <div class="mb-3">
             <label for="Title Input" class="form-label">제목</label>
-            <input id="title_input" type="title" class="form-control" name="title">
+            <input id="title_input" type="title" class="form-control" placeholder="Title" name="title">
           </div>
           <div class="mb-3">
             <label for="Description Input" class="form-label">설명</label>
-            <input id="description_input" type="description" class="form-control" name="description">
+            <input id="description_input" type="description" class="form-control" placeholder="Description" name="description">
           </div>
 
 
@@ -90,8 +88,8 @@
 
                 </div>
                 <div class="btn-group">
-                    <button type="button" id="delete_img" class="btn btn-outline-secondary btn-sm">선택 삭제</button>
-                    <button type="button" id="delete_all_imgs" class="btn btn-outline-secondary btn-sm">전체 삭제</button>
+                    <button type="button" id="delete_img_btn" class="btn btn-outline-secondary btn-sm">선택 삭제</button>
+                    <button type="button" id="delete_all_imgs_btn" class="btn btn-outline-secondary btn-sm">전체 삭제</button>
                 </div>
             </div>
 
@@ -264,6 +262,7 @@
                 console.error(error);
             });
     </script>
+    <!-- axios.js-->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <!-- editor.js-->
     <script type="text/javascript" src="../scripts/editor.js"></script>

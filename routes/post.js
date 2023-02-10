@@ -11,62 +11,34 @@ const { title } = require('process');
 
 const router = express.Router();
 
-try {
-    fs.readdirSync('uploads');
-} catch (error) {
-    console.error('There was no uploads directory. Generated new dir.')
-    fs.mkdirSync('uploads');
-}
-
-
-const upload = multer({
-    storage: multer.diskStorage({
-        destination(req, file, cb) {
-            cb(null, 'uploads/');
-        },
-        filename(req, file, cb) {
-            const ext = path.extname(file.originalname);
-            cb(null, path.basename(file.originalname, ext) + Date.now() + ext);
-        },  
-    }),
-    limits: { fileSize: 5 * 1024 * 1024 },
-});
-// /upload.array('img', 12),
-router.post('/img', isLoggedIn, upload.array('img', 12), (req, res) => {
-    console.log("POST /img successful");
-
-    let imgUrls = [];
-    req.files.forEach(img => {
-        imgUrls.push(`/img/${img.filename}`);
-    });
-
-    res.json({ url: imgUrls });
-    //console.log(req);
-});
-
 const upload2 = multer();
 
 router.post('/', isLoggedIn, upload2.none(), async (req, res, next) => {
     try {
+        const title = req.body.title.replace(/<[^>]*>/g, '');
+        const description = req.body.description;
+        const category = req.body.category;
         const content = req.body.content;
-        const title = content.match(/<h1>(.*?)<\/h1>/)[1].replace(/<\/?h1>/g, '');
-        const fileName = title + ".html";
-        //const filePath = 
-        console.log(title, fileName, content);
 
-        fs.writeFile(fileName, content, (err) => {
+        const fileName = title + ".html";
+        const filePath = path.join(__dirname, '../views/posts', fileName);
+
+        console.log('title: ', title, description, category, fileName, filePath, content);
+
+        fs.writeFile(filePath, content, (err) => {
             if (err) throw err;
             console.log('HTML file was saved!');
         });
-
-        console.log(title, content);
-
+        
+        /*
         const post = await Post.create({
             title: title,
-            path: './posts/' + fileName,
-            UserId: 0,
-            //UserId: req.user.id,
+            description: description,
+            path: filePath,
+            Category_2Id: category,
+            UserId: req.user.id,
         });
+        */
         /*
         const hashtags = req.body.content.match(/#[^\s#]+/g);
         if (hashtags) {

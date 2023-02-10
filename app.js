@@ -11,6 +11,7 @@ dotenv.config();
 const pageRouter = require('./routes/page');
 const authRouter = require('./routes/auth');
 const postRouter = require('./routes/post');
+const uploadsRouter = require("./routes/uploads")
 //const userRouter = require('./routes/user');
 const { sequelize } = require('./models');
 const passportConfig = require('./passport');
@@ -27,6 +28,7 @@ nunjucks.configure('views', {
 });
 sequelize.sync({ force: false })
     .then(() => {
+        /*
         User.findAll()
             .then(users => {
                 console.log(users);
@@ -34,6 +36,7 @@ sequelize.sync({ force: false })
             .catch(error => {
                 console.error(error);
             });
+            */
         console.log('Successful DB Connection');
     })
     .catch((err) => {
@@ -68,6 +71,7 @@ app.use(passport.session());
 app.use('/', pageRouter);
 app.use('/auth', authRouter);
 app.use('/post', postRouter);
+app.use('/uploads', uploadsRouter);
 //app.use('/user', userRouter);
 
 app.use((req, res, next) => {

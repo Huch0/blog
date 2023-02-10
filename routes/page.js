@@ -5,7 +5,7 @@ const { Post, User } = require('../models');
 const router = express.Router();
 
 router.use((req, res, next) => {
-    res.locals.message = "Test message"
+    res.locals.message = "Test message";
     res.locals.user = req.user;
     next();
 });
@@ -54,6 +54,7 @@ router.get('/:id', (req, res) => {
 
 router.get('/', async (req, res, next) => {
     try {
+        /*
         const posts = await Post.findAll({
             include: {
                 model: User,
@@ -61,13 +62,13 @@ router.get('/', async (req, res, next) => {
             },
             order: [['createdAt', 'DESC']],
         });
+        */
         res.render('home', {
             title: 'LiFE',
-            posts: posts,
+            //posts: posts,
         });
-    } catch (errror) {
+    } catch (error) {
         console.error(error);
-        next(error);
     }
 });
 

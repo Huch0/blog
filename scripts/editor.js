@@ -50,7 +50,7 @@ img_upload_btn.addEventListener('click', event => {
         console.log(formData);
         const img_container = document.querySelector('#img_container');
 
-        axios.post('/post/img', formData)
+        axios.post('/uploads/upload', formData)
             .then((res) => {
                 console.log(res);
                 const prev_img = createImgPreview(res.data.url, res.data.url, 1);
@@ -88,30 +88,56 @@ function createImgPreview(imgSrc, imgAlt, checkboxChecked) {
     return div;
 }
 
-/*
-insert_img_btn.addEventListener('click', event => {
+const delete_img_btn = document.querySelector("#delete_img_btn");
+
+delete_img_btn.addEventListener('click', (event) => {
     event.preventDefault();
 
     const preview_imgs = document.getElementsByClassName('preview_img');
-    const cursor = window.getSelection().getRangeAt(0);
-    const tmpNode = document.createTextNode("이미지 넣기 테스트");
-    console.log(tmpNode);
-    cursor.deleteContents();
-    cursor.insertNode(tmpNode);
-    //console.log(preview_imgs);
+    let checked_imgs = [];
+    let checked_index = [];
 
-    for (let i = 0; i < preview_imgs.length; i++){
-        const preview_img = preview_imgs[i];
-        const img_src = preview_img.querySelector('img').src;
-        const checkbox = preview_img.querySelector('input[type="checkbox"]');
-        //console.log(img_src, checkbox);
-
-        if (checkbox.checked) {
-            
+    for (let i = 0; i < preview_imgs.length; i++) {
+        const checkbox = preview_imgs[i].querySelector('input[type="checkbox"]');
+        if(checkbox.checked) {
+            checked_imgs.push(preview_imgs[i].querySelector('img').src);
+            checked_index.push(i);
         }
     }
+    console.log(checked_imgs);
+
+    axios.delete('/uploads/delete', {
+        data: {
+            urls: checked_imgs
+        }
+    }, {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        console.log(response);
+        console.log(preview_imgs, checked_index);
+        //Delete preview_imgs[i] tag in html
+        for (let j = checked_index.length - 1; j >= 0; j--) {
+            preview_imgs[checked_index[j]].remove();
+        }
+
+    })
+    .catch(error => {
+        console.error(error);
+    });
+
+    
+});
+
+
+const delete_all_imgs_btn = document.querySelector('#delete_all_imgs_btn')
+delete_all_imgs_btn.addEventListener('click', (event) => {
+    event.preventDefault();
+
+    alert('준비중');
 })
-*/
 
 function changeValue(value) {
     const btn = document.getElementById("category_dropdown");
@@ -131,20 +157,33 @@ submit_btn.addEventListener('click', event => {
     const category = document.querySelector('#category_dropdown').innerHTML;
 
     console.log(title_input, description_input, category);
+    if (!title_input) {
+        alert('제목 채우세요');
+        return;
+    } else if (!description_input) {
+        alert('설명 채우세요');
+        return;
+    } else if (category == 'Category') {
+        alert('카테고리 고르세요');
+        return;
+    }
 
     // Get the data from the CKEditor 5 instance
-    const data = ckeditor.getData();
+    const editor_content = ckeditor.getData();
     //console.log(ckeditor);
 
     //console.log(data);
     // Send the data to the server
-    sendDataToServer(data);
+    sendDataToServer(editor_content);
 });
 
-function sendDataToServer(data) {
+function sendDataToServer(title_input, description_input, category, editor_content) {
     const formData = new FormData();
-        console.log(data);
-        formData.append('content', data);
+        console.log(editor_content);
+        formData.append('title', title_input);
+        formData.append('description', description_input);
+        formData.append('category', category);
+        formData.append('content', editor_content);
         axios.post('/post/', formData)
           .then((res) => {
             console.log('Post succeeded');
