@@ -10,13 +10,17 @@ const passport = require('passport');
 dotenv.config();
 const pageRouter = require('./routes/page');
 const authRouter = require('./routes/auth');
-const postRouter = require('./routes/post');
+const post_uploadRouter = require('./routes/post_upload');
 const uploadsRouter = require("./routes/uploads")
+const tableRouter = require('./routes/tables');
 //const userRouter = require('./routes/user');
 const { sequelize } = require('./models');
 const passportConfig = require('./passport');
 
 const User = require('./models/user');
+const Post = require('./models/post');
+const Category_1 = require('./models/category_1');
+const Category_2 = require('./models/category_2');
 
 const app = express();
 passportConfig();
@@ -29,7 +33,7 @@ nunjucks.configure('views', {
 sequelize.sync({ force: false })
     .then(() => {
         /*
-        User.findAll()
+        Post.findAll()
             .then(users => {
                 console.log(users);
             })
@@ -70,8 +74,9 @@ app.use(passport.session());
 
 app.use('/', pageRouter);
 app.use('/auth', authRouter);
-app.use('/post', postRouter);
+app.use('/post_upload', post_uploadRouter);
 app.use('/uploads', uploadsRouter);
+app.use('/tables', tableRouter);
 //app.use('/user', userRouter);
 
 app.use((req, res, next) => {

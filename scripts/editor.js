@@ -145,8 +145,10 @@ function changeValue(value) {
     console.log("Selected value:", value);
   }
 
-// 게시글 작성 버튼 
 
+
+const ids = [' ', 'Web', 'AI'];
+// 게시글 작성 버튼 
 const submit_btn = document.querySelector("#submit_btn");
 
 submit_btn.addEventListener('click', event => {
@@ -155,8 +157,9 @@ submit_btn.addEventListener('click', event => {
     const title_input = document.querySelector("#title_input").value;
     const description_input = document.querySelector("#description_input").value;
     const category = document.querySelector('#category_dropdown').innerHTML;
+    const category2_id = ids.indexOf(category);
 
-    console.log(title_input, description_input, category);
+    console.log(title_input, description_input, category, category2_id);
     if (!title_input) {
         alert('제목 채우세요');
         return;
@@ -170,24 +173,23 @@ submit_btn.addEventListener('click', event => {
 
     // Get the data from the CKEditor 5 instance
     const editor_content = ckeditor.getData();
-    //console.log(ckeditor);
 
-    //console.log(data);
     // Send the data to the server
-    sendDataToServer(editor_content);
+    sendDataToServer(title_input, description_input, category2_id, editor_content);
 });
 
-function sendDataToServer(title_input, description_input, category, editor_content) {
+function sendDataToServer(title_input, description_input, category2_id, editor_content) {
     const formData = new FormData();
         console.log(editor_content);
         formData.append('title', title_input);
         formData.append('description', description_input);
-        formData.append('category', category);
+        formData.append('category2_id', category2_id);
         formData.append('content', editor_content);
-        axios.post('/post/', formData)
+        axios.post('/post_upload/', formData)
           .then((res) => {
             console.log('Post succeeded');
             console.log(res);
+            window.location.href = "/"; // redirect the user to the main page
           })
           .catch((err) => {
             console.error(err);

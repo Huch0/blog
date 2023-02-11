@@ -9,6 +9,8 @@ const { hash } = require('bcrypt');
 const { post } = require('./page');
 const { title } = require('process');
 
+const Category_2 = require('../models/category_2');
+
 const router = express.Router();
 
 const upload2 = multer();
@@ -17,28 +19,49 @@ router.post('/', isLoggedIn, upload2.none(), async (req, res, next) => {
     try {
         const title = req.body.title.replace(/<[^>]*>/g, '');
         const description = req.body.description;
-        const category = req.body.category;
+        const category2_id = req.body.category2_id;
         const content = req.body.content;
 
-        const fileName = title + ".html";
-        const filePath = path.join(__dirname, '../views/posts', fileName);
+        // Get the latest post from the database
+        const latestPost = await Post.findOne({
+            order: [['id', 'DESC']]
+        });
 
-        console.log('title: ', title, description, category, fileName, filePath, content);
+        // Get the latest post id
+        let latestPostId = 0;
+        if (latestPost) {
+            latestPostId = latestPost.id;
+        }
+
+        // Generate the file name using the latest post id
+        const post_id = `${latestPostId + 1}`;
+        const fileName = post_id + ".html";
+        const filePath = path.join(__dirname, '../views/posts', fileName);
+        const relativeFilePath = './post/' + post_id;
+
+        console.log('title: ', title, description, category2_id, fileName, filePath, content);
 
         fs.writeFile(filePath, content, (err) => {
             if (err) throw err;
             console.log('HTML file was saved!');
         });
-        
-        /*
-        const post = await Post.create({
-            title: title,
-            description: description,
-            path: filePath,
-            Category_2Id: category,
-            UserId: req.user.id,
-        });
-        */
+
+        try {
+            const post = await Post.create({
+                title: title,
+                description: description,
+                path: relativeFilePath,
+                Category2Id: category2_id,
+                UserId: req.user.id,
+                UserNick: req.user.nick,
+            });
+
+            res.redirect('/');
+        } catch (error) {
+            // handle the error
+            console.error(error);
+            res.redirect('/');
+        }
         /*
         const hashtags = req.body.content.match(/#[^\s#]+/g);
         if (hashtags) {

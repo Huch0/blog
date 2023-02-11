@@ -1,18 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{title}}</title>
-    
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="./main.css">
-    <!-- Font Awesome Icon-->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
-    
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{title}}</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="./main.css">
+  <!-- Font Awesome Icon-->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+    integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+
 </head>
+
 <body>
   <!-- Jumbotron -->
   <a class="navbar-brand" href="/programming_home">
@@ -21,142 +24,62 @@
       <p>The Real Risk is Doing Nothing</p>
     </div>
   </a>
- 
+
   <!-- Header Menu bar-->
   <header class="p-3 mb-3 border-bottom text-bg-dark">
-      <div class="container">
-        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-          <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none">
-            <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg>
+    <div class="container">
+      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+        <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none">
+          <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap">
+            <use xlink:href="#bootstrap"></use>
+          </svg>
+        </a>
+
+        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+          <li><a href="#" class="nav-link px-2 text-secondary">Web</a></li>
+          <li><a href="#" class="nav-link px-2 text-white">Algorithm</a></li>
+          <li><a href="#" class="nav-link px-2 text-white">Datastructure</a></li>
+          <li><a href="#" class="nav-link px-2 text-white">AI</a></li>
+        </ul>
+
+        <div class="dropdown text-end">
+          <a href="#" class="d-block text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
           </a>
-  
-          <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-            <li><a href="#" class="nav-link px-2 text-secondary">Web</a></li>
-            <li><a href="#" class="nav-link px-2 text-white">Algorithm</a></li>
-            <li><a href="#" class="nav-link px-2 text-white">Datastructure</a></li>
-            <li><a href="#" class="nav-link px-2 text-white">AI</a></li>
+          <ul class="dropdown-menu text-small">
+            <li><a class="dropdown-item" href="#">New post</a></li>
+            <li><a class="dropdown-item" href="#">Settings</a></li>
+            <li><a class="dropdown-item" href="#">Profile</a></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" href="#">Sign out</a></li>
           </ul>
-  
-          <div class="dropdown text-end">
-            <a href="#" class="d-block text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-              <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
-            </a>
-            <ul class="dropdown-menu text-small">
-              <li><a class="dropdown-item" href="#">New post</a></li>
-              <li><a class="dropdown-item" href="#">Settings</a></li>
-              <li><a class="dropdown-item" href="#">Profile</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="#">Sign out</a></li>
-            </ul>
-          </div>
         </div>
       </div>
+    </div>
   </header>
   <!-- Posts List-->
   <div class="album py-5 bg-light">
     <div class="container">
       <h1>Web{응답받은 카테고리}</h1>
-      <div class="row ">
-        <div class="col">
+      <div class="col">
+        <a class="nav-link" href="/post/14" style="width:280px; height:450px">
           <div class="card" style="width:280px; height:450px">
-            <img src="../images/basic_thumbnail.png" class="card-img-top h-50" alt="thumbnail">
+            <img src="/img/basic_thumbnail.png" class="card-img-top h-50" alt="thumbnail">
             <div class="card-body">
               <h6 class="card-subtitle mb-2 text-muted">Programming/Web</h6>
-              <h5 class="card-title">테스트 카드</h5>
-              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+              <h5 class="card-title">14.html 연결된 카드</h5>
+              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
+                content.</p>
               <h6 class="card-subtitle mb-2 text-muted">by huch0 - 2023.01.30</h6>
               <h6 class="card-subtitle mb-2 text-muted">1240 views</h6>
             </div>
           </div>
-        </div>
-        <div class="col">
-          <a class="nav-link" href="/post" style="width:280px; height:450px">
-            <div class="card" style="width:280px; height:450px">
-              <img src="/img/basic_thumbnail.png" class="card-img-top h-50" alt="thumbnail">
-              <div class="card-body">
-                <h6 class="card-subtitle mb-2 text-muted">Programming/Web</h6>
-                <h5 class="card-title">post.html연결된 카드</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <h6 class="card-subtitle mb-2 text-muted">by huch0 - 2023.01.30</h6>
-                <h6 class="card-subtitle mb-2 text-muted">1240 views</h6>
-              </div>
-            </div>
-          </a>
-          
-        </div>
-        <div class="col">
-          <div class="card" style="width:280px; height:450px">
-            <img src="../images/basic_thumbnail.png" class="card-img-top h-50" alt="thumbnail">
-            <div class="card-body">
-              <h6 class="card-subtitle mb-2 text-muted">Programming/Web</h6>
-              <h5 class="card-title">테스트 카드</h5>
-              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-              <h6 class="card-subtitle mb-2 text-muted">by huch0 - 2023.01.30</h6>
-              <h6 class="card-subtitle mb-2 text-muted">1240 views</h6>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card" style="width:280px; height:450px">
-            <img src="../images/basic_thumbnail.png" class="card-img-top h-50" alt="thumbnail">
-            <div class="card-body">
-              <h6 class="card-subtitle mb-2 text-muted">Programming/Web</h6>
-              <h5 class="card-title">테스트 카드</h5>
-              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-              <h6 class="card-subtitle mb-2 text-muted">by huch0 - 2023.01.30</h6>
-              <h6 class="card-subtitle mb-2 text-muted">1240 views</h6>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card" style="width:280px; height:450px">
-            <img src="../images/basic_thumbnail.png" class="card-img-top h-50" alt="thumbnail">
-            <div class="card-body">
-              <h6 class="card-subtitle mb-2 text-muted">Programming/Web</h6>
-              <h5 class="card-title">테스트 카드</h5>
-              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-              <h6 class="card-subtitle mb-2 text-muted">by huch0 - 2023.01.30</h6>
-              <h6 class="card-subtitle mb-2 text-muted">1240 views</h6>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card" style="width:280px; height:450px">
-            <img src="../images/basic_thumbnail.png" class="card-img-top h-50" alt="thumbnail">
-            <div class="card-body">
-              <h6 class="card-subtitle mb-2 text-muted">Programming/Web</h6>
-              <h5 class="card-title">테스트 카드</h5>
-              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-              <h6 class="card-subtitle mb-2 text-muted">by huch0 - 2023.01.30</h6>
-              <h6 class="card-subtitle mb-2 text-muted">1240 views</h6>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card" style="width:280px; height:450px">
-            <img src="../images/basic_thumbnail.png" class="card-img-top h-50" alt="thumbnail">
-            <div class="card-body">
-              <h6 class="card-subtitle mb-2 text-muted">Programming/Web</h6>
-              <h5 class="card-title">테스트 카드</h5>
-              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-              <h6 class="card-subtitle mb-2 text-muted">by huch0 - 2023.01.30</h6>
-              <h6 class="card-subtitle mb-2 text-muted">1240 views</h6>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card" style="width:280px; height:450px">
-            <img src="../images/basic_thumbnail.png" class="card-img-top h-50" alt="thumbnail">
-            <div class="card-body">
-              <h6 class="card-subtitle mb-2 text-muted">Programming/Web</h6>
-              <h5 class="card-title">테스트 카드</h5>
-              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-              <h6 class="card-subtitle mb-2 text-muted">by huch0 - 2023.01.30</h6>
-              <h6 class="card-subtitle mb-2 text-muted">1240 views</h6>
-            </div>
-          </div>
-        </div>
+        </a>
       </div>
+
     </div>
   </div>
 
@@ -165,7 +88,8 @@
     <div class="container-fluid">
       <form class="d-flex" role="search">
         <div class="dropdown">
-          <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+            aria-expanded="false">
             제목
           </button>
           <ul class="dropdown-menu">
@@ -197,4 +121,5 @@
   <!-- Latest compiled JavaScript -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
