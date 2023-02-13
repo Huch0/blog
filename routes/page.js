@@ -2,6 +2,12 @@ const express = require('express');
 const { isLoggedIn, isNotLoggedIn } = require('./is_logged_in');
 const { Post, User } = require('../models');
 
+function format_date(date_str) {
+    let date = new Date(date_str);
+    let formattedDate = date.getFullYear() + "." + (date.getMonth() + 1).toString().padStart(2, "0") + "." + date.getDate().toString().padStart(2, "0");
+    return formattedDate;
+  }
+  
 const router = express.Router();
 
 router.use((req, res, next) => {
@@ -32,7 +38,7 @@ router.get('/programming_home', (req, res) => {
 
 
 router.get('/editor', isLoggedIn, (req, res) => {
-    res.render('editor', { title: '글작성' });
+    res.render('editor', { title: '글작성' }); ///->
 });
 
 /*
@@ -53,7 +59,7 @@ router.get('/post/:id', (req, res) => {
             console.log(post.dataValues);
             console.log('/posts/' + post_id);
 
-            res.render('post', { title: '게시글', post_path: './posts/' + post_id + '.html' });
+            res.render('post', { id: post.id, author: post.UserId, date: format_date(post.createdAt), title: post.title, description: post.description, post_path: './posts/' + post_id + '.html' });
         })
         .catch((error) => {
             console.error(error);

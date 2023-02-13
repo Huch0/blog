@@ -11,6 +11,10 @@ module.exports = class Post extends Sequelize.Model {
                 type: Sequelize.STRING(50),
                 allowNull: false,
             },
+            thumbnail_url: {
+                type: Sequelize.STRING(200),
+                allowNull: false,
+            },
             path: {
                 type: Sequelize.STRING(200),
                 allowNull: false,

@@ -17,6 +17,61 @@
 </head>
 
 <table class="table">
+    <h1 class="text-center my-5">카테고리1</h1>
+    <tr>
+        <th>ID</th>
+        <th>name</th>
+    </tr>
+    {% for category_1 in categories_1 %}
+    <tr>
+        <td>{{ category_1.id }}</td>
+        <td>{{ category_1.name }}</td>
+    </tr>
+    </tr>
+    {% endfor %}
+</table>
+
+<form id="category1_form">
+    <div class="mb-3">
+        <label class="form-label">카테고리_1 이름</label>
+        <input class="form-control" id="name_input">
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<table class="table">
+    <h1 class="text-center my-5">카테고리2</h1>
+    <tr>
+        <th>ID</th>
+        <th>Category_1 ID</th>
+        <th>name</th>
+    </tr>
+    {% for category_2 in categories_2 %}
+    <tr>
+        <td>{{ category_2.id }}</td>
+        <td>{{ category_2.Category1Id }}</td>
+        <td>{{ category_2.name }}</td>
+    </tr>
+    </tr>
+    {% endfor %}
+</table>
+
+<form id="category2_form">
+    <div class="mb-3 d-flex">
+        <div class="form-group mr-3">
+            <label class="form-label">부모 카테고리_1 ID</label>
+            <input class="form-control" id="parent_category_input" type="number">
+        </div>
+        <div class="form-group">
+            <label class="form-label">카테고리_2 이름</label>
+            <input class="form-control" id="name_input">
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<table class="table">
+    <h1 class="text-center my-5">유저</h1>
     <tr>
         <th>ID</th>
         <th>Nick</th>
@@ -34,69 +89,128 @@
 </table>
 
 <table class="table">
+    <h1 class="text-center my-5">게시글</h1>
     <tr>
         <th>ID</th>
         <th>title</th>
         <th>description</th>
+        <th>thumbnail_url</th>
         <th>path</th>
         <th>Created_at</th>
-        <th>User Nick</th>
-        <th>Category_2 name</th>
+        <th>User ID</th>
+        <th>Category_2 ID</th>
+        <th>Action</th>
     </tr>
     {% for post in posts %}
     <tr>
         <td>{{ post.id }}</td>
         <td>{{ post.title }}</td>
         <td>{{ post.description }}</td>
+        <td>{{ post.thumbnail_url }}</td>
         <td>{{ post.path }}</td>
         <td>{{ post.createdAt }}</td>
         <td>{{ post.UserId }}</td>
         <td>{{ post.Category2Id }}</td>
-    </tr>
+        <td>
+            <button class="btn btn-warning" onclick="updatePost('{{ post.id | escape }}')">Update</button>
+            <button class="btn btn-danger" onclick="deletePost('{{ post.id | escape }}')">Delete</button>
+        </td>
     </tr>
     {% endfor %}
 </table>
 
 <table class="table">
+    <h1 class="text-center my-5">삭제된 게시글</h1>
     <tr>
         <th>ID</th>
-        <th>name</th>
+        <th>title</th>
+        <th>description</th>
+        <th>thumbnail_url</th>
+        <th>path</th>
+        <th>Created_at</th>
+        <th>User ID</th>
+        <th>Category_2 ID</th>
     </tr>
-    {% for category_2 in categories_2 %}
+    {% for deleted_post in deleted_posts %}
     <tr>
-        <td>{{ category_2.id }}</td>
-        <td>{{ category_2.name }}</td>
-    </tr>
+        <td>{{ deleted_post.id }}</td>
+        <td>{{ deleted_post.title }}</td>
+        <td>{{ deleted_post.description }}</td>
+        <td>{{ deleted_post.thumbnail_url }}</td>
+        <td>{{ deleted_post.path }}</td>
+        <td>{{ deleted_post.createdAt }}</td>
+        <td>{{ deleted_post.UserId }}</td>
+        <td>{{ deleted_post.Category2Id }}</td>
     </tr>
     {% endfor %}
 </table>
 
-<form id="category_form">
-    <div class="mb-3">
-        <label class="form-label">카테고리 이름</label>
-        <input class="form-control" id="name_input">
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+<h1 class="text-center my-5">테스트 : {{test}}</h1>
+
 
 <!-- axios.js-->
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
-    const category_form = document.querySelector('#category_form');
-    category_form.addEventListener('submit', (event) => {
+    const category1_form = document.querySelector('#category1_form');
+    category1_form.addEventListener('submit', (event) => {
         event.preventDefault();
 
-        const name_input = document.querySelector('#name_input');
+        const name_input = category1_form.querySelector('#name_input');
         const name = name_input.value;
 
-        axios.post('/tables/createCategory_2', { name })
+        if (!name) {
+            alert('이름 입력하세요');
+            return;
+        }
+        axios.post('/category_db/createCategory_1', { name })
             .then(response => {
                 console.log(response.data);
+                window.location.href = "/tables/database";
                 // do something with the response data
             })
             .catch(error => {
                 console.error(error);
             });
     });
+
+    const category2_form = document.querySelector('#category2_form');
+    category2_form.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        const parent_category_input = category2_form.querySelector('#parent_category_input');
+        const parent_category_id = parent_category_input.value;
+
+        const name_input = category2_form.querySelector('#name_input');
+        const name = name_input.value;
+
+        if (!name) {
+            alert('이름 입력하세요');
+            return;
+        } else if (!parent_category_id) {
+            alert('부모 카테고리 입력하세요');
+            return;
+        };
+
+        axios.post('/category_db/createCategory_2', { parent_category_id, name })
+            .then(response => {
+                console.log(response.data);
+                window.location.href = "/tables/database";
+                // do something with the response data
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    });
+
+    //Delete Post
+    async function deletePost(postId) {
+        try {
+            await axios.delete('/post_upload/delete/' + postId);
+            // After the post has been deleted, you can reload the page or remove the row from the table without reloading the page.
+            location.reload();
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
 </script>

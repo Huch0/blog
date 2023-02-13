@@ -47,26 +47,59 @@
         }
     </style>
     <div id="container">
-        <div class="dropdown">
-            <button id="category_dropdown" class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Category</button>
-            <ul class="dropdown-menu">
-              <li class="dropdown-item">Programming</li>
-              <li><a class="dropdown-item" href="#" onclick="changeValue('Web')">- Web</a></li>
-              <li><a class="dropdown-item" href="#" onclick="changeValue('AI')">- AI</a></li>
-              <li class="dropdown-item">Math</li>
-              <li><a class="dropdown-item" href="#" onclick="changeValue('공학선형대수학')">- 공학선형대수학</a></li>
-              <li><a class="dropdown-item" href="#" onclick="changeValue('미분적분학')">- 미분적분학</a></li>
-            </ul>
-          </div>
-        <div class="mb-3">
-            <label for="Title Input" class="form-label">제목</label>
-            <input id="title_input" type="title" class="form-control" placeholder="Title" name="title">
-          </div>
-          <div class="mb-3">
-            <label for="Description Input" class="form-label">설명</label>
-            <input id="description_input" type="description" class="form-control" placeholder="Description" name="description">
-          </div>
+        <div class="p-3 mb-2 bg-secondary text-white" id="post_metadata_form">
+            <div class="dropdown">
+                <button id="category_dropdown" class="btn btn-secondary dropdown-toggle" type="button"
+                    data-bs-toggle="dropdown" aria-expanded="false">Category</button>
+                <ul id="category_dropdown_menu" class="dropdown-menu">
 
+
+                    
+                    <!--
+
+                    <li class="dropdown-item">Code</li>
+                    <div id="Code_category">
+                        <li><a class="dropdown-item" href="#" onclick="changeValue('Web')">- Web</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="changeValue('AI')">- AI</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="changeValue('Algorithm')">- Algorithm</a></li>
+                    </div>
+                    <li class="dropdown-item">Math</li>
+                    <div id="Math_category">
+                        <li><a class="dropdown-item" href="#" onclick="changeValue('LinearAlgebra')">- LinearAlgebra</a></li>
+                    </div>
+                    <li class="dropdown-item">English</li>
+                    <div id="English_category">
+                        <li><a class="dropdown-item" href="#" onclick="changeValue('TOEFL')">- TOEFL</a></li>
+                    </div>
+            
+                    -->
+                </ul>
+            </div>
+            <div class="mb-3">
+                <label for="Title Input" class="form-label">제목</label>
+                <input id="title_input" type="title" class="form-control" placeholder="Title" name="title">
+            </div>
+            <div class="mb-3">
+                <label for="Description Input" class="form-label">설명</label>
+                <input id="description_input" type="description" class="form-control" placeholder="Description"
+                    name="description">
+            </div>
+            <div class="mb-3">
+                <label for="Thumbnail Input" class="form-label">썸네일</label>
+                <div class="input-group mb-3">
+                    <input id="thumbnail_input" type="file" class="form-control" name="thumbnail"
+                        accept=".jpg,.jpeg,.png">
+                    <button id="thumbnail_upload_btn" class="input-group-text" for="inputGroupFile02">Upload</button>
+                </div>
+            </div>
+            <!-- 썸네일 미리보기-->
+            <div id="thumbnail_container" class="container d-flex flex-row flex-wrap">
+
+
+            </div>
+            <p class="text-warning">(사진 여러개 올렸으면 하나만 남기고 삭제하세요)</p>
+            <button type="button" id="delete_thumbnail_btn" class="btn btn-outline-warning btn-sm">선택 삭제</button>
+        </div>
 
         <form id="editor_form">
             <div id="editor">
@@ -89,7 +122,7 @@
                 </div>
                 <div class="btn-group">
                     <button type="button" id="delete_img_btn" class="btn btn-outline-secondary btn-sm">선택 삭제</button>
-                    <button type="button" id="delete_all_imgs_btn" class="btn btn-outline-secondary btn-sm">전체 삭제</button>
+                    <button type="button" id="delete_all_imgs_btn" class="btn btn-outline-secondary btn-sm">전체삭제</button>
                 </div>
             </div>
 

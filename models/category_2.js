@@ -12,7 +12,7 @@ module.exports = class Category_2 extends Sequelize.Model {
             sequelize,
             timestamps: false,
             modelName: 'Category_2',
-            tableName: 'cateogry_2',
+            tableName: 'category_2',
             paranoid: false,
             charset: 'utf8',
             collate: 'utf8_general_ci',
@@ -21,6 +21,6 @@ module.exports = class Category_2 extends Sequelize.Model {
 
     static associate(db) {
         db.Category_2.belongsTo(db.Category_1);
-        db.Category_2.hasMany(db.Post);
+        db.Category_2.hasMany(db.Post, { onDelete: 'SET NULL' });
     }
 };

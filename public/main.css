@@ -1,17 +1,19 @@
-
 .life {
     font-size: 75px;
 }
+
 .jumbotron {
     margin-bottom: 0;
     padding-top: 32px;
     padding-bottom: 0;
     background-color: white;
 }
+
 .my-nav-link {
     font-size: 20px !important;
     padding: 5px 20px !important;
 }
+
 .search-area {
     position: relative;
     width: 582px;
@@ -19,6 +21,7 @@
     border: 2px solid #000000;
     border-radius: 2px;
 }
+
 .search-input {
     position: absolute;
     top: 0;
@@ -30,6 +33,7 @@
     font-weight: 700;
     outline: 0;
 }
+
 .search-btn {
     position: absolute;
     top: 0;
@@ -48,31 +52,41 @@ main .ck-editor[role='application'] .ck.ck-content,
 .ck.ck-editor__editable[role='textbox'],
 /* Inline & Balloon build. */
 .ck.editor[role='textbox'] {
-	width: 100%;
-	background: #fff;
-	font-size: 1em;
-	line-height: 1.6em;
-	min-height: var(--ck-sample-editor-min-height);
-	padding: 1.5em 2em;
+    width: 100%;
+    background: #fff;
+    font-size: 1em;
+    line-height: 1.6em;
+    min-height: var(--ck-sample-editor-min-height);
+    padding: 1.5em 2em;
 }
 
 .ck.ck-editor__editable {
-	background: #fff;
-	border: 1px solid hsl(0, 0%, 70%);
-	width: 100%;
+    background: #fff;
+    border: 1px solid hsl(0, 0%, 70%);
+    width: 100%;
 }
 
 /* Because of sidebar `position: relative`, Edge is overriding the outline of a focused editor. */
 .ck.ck-editor__editable {
-	position: relative;
-	z-index: var(--ck-sample-editor-z-index);
+    position: relative;
+    z-index: var(--ck-sample-editor-z-index);
 }
 
 .editor-container {
-	display: flex;
-	flex-direction: row;
+    display: flex;
+    flex-direction: row;
     flex-wrap: nowrap;
     position: relative;
-	width: 100%;
-	justify-content: center;
+    width: 100%;
+    justify-content: center;
 }
+
+#prev_img img {
+    height: 60px;
+    width: 60px;
+}
+#prev_thumbnail img {
+    height: 300px;
+    width: 300px;
+}
+

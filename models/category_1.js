@@ -12,7 +12,7 @@ module.exports = class Category_1 extends Sequelize.Model {
             sequelize,
             timestamps: false,
             modelName: 'Category_1',
-            tableName: 'cateogry_1',
+            tableName: 'category_1',
             paranoid: false,
             charset: 'utf8',
             collate: 'utf8_general_ci',
@@ -20,6 +20,6 @@ module.exports = class Category_1 extends Sequelize.Model {
     }
 
     static associate(db) {
-        db.Category_1.hasMany(db.Category_2);
+        db.Category_1.hasMany(db.Category_2, { onDelete: 'SET NULL' });
     }
 };

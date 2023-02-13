@@ -1,3 +1,4 @@
+
 /*
     필요한 기능
     1. 글쓰기 버튼을 눌렀을 때 editor 안에 있는 내용을 서버로 POST함.
@@ -14,21 +15,98 @@ $.ajax({
     }
 });
 
-/*
-이미지 업로드 버튼을 누른다.
-1. 이미지 선택해서 업로드 
-2. 이벤트 리스너로 업로드된 파일 확인.
-3. 서버에 post/img 요청
-4. 서버가 이미지 저장후 경로를 응답해줌
-5. 그 경로를 가진 이미지 태그 생성
-6. 
-2. 서버에 post /img 요청.
-3. 서버에서 이미지 경로를 받아옴.
-4. 받아온 파일 경로를 넣어 커서가 깜빡이는 곳에 <img src="~~"> 삽입
-*/
-console.log('hi');
+window.onload = () => {
+    axios
+        .get('/category_db/category_dropdown')
+        .then(response => {
+            const category_dropdown_menu = document.querySelector('#category_dropdown_menu');
+
+            //console.log(response.data.generated_menu); 
+            category_dropdown_menu.innerHTML = response.data.generated_menu;
+        })
+        .catch(error => {
+            console.error(error);
+        });
+};
 
 
+
+
+function changeValue(value) {
+    const btn = document.getElementById("category_dropdown");
+    btn.innerHTML = value;
+    console.log("Selected value:", value);
+}
+
+
+const thumbnail_upload_btn = document.querySelector('#thumbnail_upload_btn');
+//썸네일 업로드 버튼 POST 요청
+thumbnail_upload_btn.addEventListener('click', event => {
+    event.preventDefault();
+
+    let thumbnail_img = document.querySelector("#thumbnail_input").files[0];
+    console.log(thumbnail_img);
+
+    const formData = new FormData();
+
+    formData.append("img", thumbnail_img);
+    console.log(formData);
+    const thumbnail_container = document.querySelector('#thumbnail_container');
+
+    axios.post('/uploads/upload', formData)
+        .then((res) => {
+            console.log(res);
+            const prev_img = createImgPreview("prev_thumbnail", res.data.url, res.data.url, 0);
+            console.log(prev_img);
+            thumbnail_container.appendChild(prev_img);
+        })
+        .catch((err) => {
+            console.error(err);
+        });
+});
+
+const delete_thumbnail_btn = document.querySelector("#delete_thumbnail_btn");
+
+delete_thumbnail_btn.addEventListener('click', (event) => {
+    event.preventDefault();
+
+    const prev_thumbnails = document.getElementsByClassName('prev_thumbnail');
+    let checked_imgs = [];
+    let checked_index = [];
+
+    for (let i = 0; i < prev_thumbnails.length; i++) {
+        const checkbox = prev_thumbnails[i].querySelector('input[type="checkbox"]');
+        if (checkbox.checked) {
+            checked_imgs.push(prev_thumbnails[i].querySelector('img').src);
+            checked_index.push(i);
+        }
+    }
+    console.log(checked_imgs);
+
+    axios.delete('/uploads/delete', {
+        data: {
+            urls: checked_imgs
+        }
+    }, {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => {
+            console.log(response);
+            console.log(prev_thumbnails, checked_index);
+            //Delete preview_imgs[i] tag in html
+            for (let j = checked_index.length - 1; j >= 0; j--) {
+                prev_thumbnails[checked_index[j]].remove();
+            }
+
+        })
+        .catch(error => {
+            console.error(error);
+        });
+
+
+});
 
 const form = document.querySelector('#editor_form');
 const img_upload_btn = document.querySelector("#img_upload");
@@ -53,7 +131,7 @@ img_upload_btn.addEventListener('click', event => {
         axios.post('/uploads/upload', formData)
             .then((res) => {
                 console.log(res);
-                const prev_img = createImgPreview(res.data.url, res.data.url, 1);
+                const prev_img = createImgPreview("prev_img", res.data.url, res.data.url, 1);
                 console.log(prev_img);
                 img_container.appendChild(prev_img);
 
@@ -67,16 +145,18 @@ img_upload_btn.addEventListener('click', event => {
     }
 
 });
-function createImgPreview(imgSrc, imgAlt, checkboxChecked) {
+function createImgPreview(id, imgSrc, imgAlt, checkboxChecked) {
     const div = document.createElement("div");
-    div.id = "img_preview";
-    div.className = "preview_img mx-3";
+    div.id = id;
+    if (id == "prev_img") {
+        div.className = "prev_img mx-3";
+    } else {
+        div.className = "prev_thumbnail mx-3";
+    }
 
     const img = document.createElement("img");
     img.src = imgSrc;
     img.alt = imgAlt;
-    img.style.weight = "60px";
-    img.style.height = "60px";
 
     const input = document.createElement("input");
     input.type = "checkbox";
@@ -93,42 +173,43 @@ const delete_img_btn = document.querySelector("#delete_img_btn");
 delete_img_btn.addEventListener('click', (event) => {
     event.preventDefault();
 
-    const preview_imgs = document.getElementsByClassName('preview_img');
-    let checked_imgs = [];
+    const prev_imgs = document.getElementsByClassName('prev_img');
+    console.log("prev_imgs", prev_imgs);
+    let checked_imgs_url = [];
     let checked_index = [];
 
-    for (let i = 0; i < preview_imgs.length; i++) {
-        const checkbox = preview_imgs[i].querySelector('input[type="checkbox"]');
-        if(checkbox.checked) {
-            checked_imgs.push(preview_imgs[i].querySelector('img').src);
+    for (let i = 0; i < prev_imgs.length; i++) {
+        const checkbox = prev_imgs[i].querySelector('input[type="checkbox"]');
+        if (checkbox.checked) {
+            checked_imgs_url.push(prev_imgs[i].querySelector('img').src);
             checked_index.push(i);
         }
     }
-    console.log(checked_imgs);
+    console.log(checked_imgs_url);
 
     axios.delete('/uploads/delete', {
         data: {
-            urls: checked_imgs
+            urls: checked_imgs_url
         }
     }, {
         headers: {
             'Content-Type': 'application/json'
         }
     })
-    .then(response => {
-        console.log(response);
-        console.log(preview_imgs, checked_index);
-        //Delete preview_imgs[i] tag in html
-        for (let j = checked_index.length - 1; j >= 0; j--) {
-            preview_imgs[checked_index[j]].remove();
-        }
+        .then(response => {
+            console.log(response);
+            console.log(prev_imgs, checked_index);
+            //Delete preview_imgs[i] tag in html
+            for (let j = checked_index.length - 1; j >= 0; j--) {
+                prev_imgs[checked_index[j]].remove();
+            }
 
-    })
-    .catch(error => {
-        console.error(error);
-    });
+        })
+        .catch(error => {
+            console.error(error);
+        });
 
-    
+
 });
 
 
@@ -139,15 +220,9 @@ delete_all_imgs_btn.addEventListener('click', (event) => {
     alert('준비중');
 })
 
-function changeValue(value) {
-    const btn = document.getElementById("category_dropdown");
-    btn.innerHTML = value;
-    console.log("Selected value:", value);
-  }
 
 
-
-const ids = [' ', 'Web', 'AI'];
+const ids = [' ', 'Web', 'AI', 'Descrete', 'TOEFL', 'Debate'];
 // 게시글 작성 버튼 
 const submit_btn = document.querySelector("#submit_btn");
 
@@ -157,9 +232,7 @@ submit_btn.addEventListener('click', event => {
     const title_input = document.querySelector("#title_input").value;
     const description_input = document.querySelector("#description_input").value;
     const category = document.querySelector('#category_dropdown').innerHTML;
-    const category2_id = ids.indexOf(category);
 
-    console.log(title_input, description_input, category, category2_id);
     if (!title_input) {
         alert('제목 채우세요');
         return;
@@ -170,30 +243,64 @@ submit_btn.addEventListener('click', event => {
         alert('카테고리 고르세요');
         return;
     }
+    const category2_id = ids.indexOf(category);
 
-    // Get the data from the CKEditor 5 instance
-    const editor_content = ckeditor.getData();
+    try {
+        const thumbnail_url = document.querySelector("#prev_thumbnail img").src;
 
-    // Send the data to the server
-    sendDataToServer(title_input, description_input, category2_id, editor_content);
+        console.log(title_input, description_input, thumbnail_url, category, category2_id);
+
+        // Get the data from the CKEditor 5 instance
+        const editor_content = ckeditor.getData();
+
+        // Send the data to the server
+        sendDataToServer(title_input, description_input, thumbnail_url, category2_id, editor_content);
+    } catch (error) {
+        if (!document.querySelector("#prev_thumbnail img")) {
+            alert('썸네일 고르세요');
+        }
+        console.error(error);
+    }
+
 });
 
-function sendDataToServer(title_input, description_input, category2_id, editor_content) {
+function sendDataToServer(title_input, description_input, thumbnail_url, category2_id, editor_content) {
     const formData = new FormData();
-        console.log(editor_content);
-        formData.append('title', title_input);
-        formData.append('description', description_input);
-        formData.append('category2_id', category2_id);
-        formData.append('content', editor_content);
-        axios.post('/post_upload/', formData)
-          .then((res) => {
+    console.log(editor_content);
+    formData.append('title', title_input);
+    formData.append('description', description_input);
+    formData.append('thumbnail_url', thumbnail_url);
+    formData.append('category2_id', category2_id);
+    formData.append('content', editor_content);
+    axios.post('/post_upload/', formData)
+        .then((res) => {
             console.log('Post succeeded');
             console.log(res);
             window.location.href = "/"; // redirect the user to the main page
-          })
-          .catch((err) => {
+        })
+        .catch((err) => {
             console.error(err);
-          });
+        });
 };
 
+// Update Post
+const updatePost = async (postId, dbUpdates, contentUpdates) => {
+    try {
+        const response = await axios.post(`/update/${postId}`, {
+            db_updates: dbUpdates,
+            content_updates: contentUpdates
+        });
+        return response.data;
+    } catch (error) {
+        console.error(error);
+    }
+};
 
+const dbUpdates = {
+    title: "New Title",
+    description: "New Description"
+};
+const contentUpdates = {
+    currentString: "Old Title",
+    newString: "New Title"
+};

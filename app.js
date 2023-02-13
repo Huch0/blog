@@ -10,7 +10,8 @@ const passport = require('passport');
 dotenv.config();
 const pageRouter = require('./routes/page');
 const authRouter = require('./routes/auth');
-const post_uploadRouter = require('./routes/post_upload');
+const post_db_Router = require('./routes/post_db');
+const category_db_Router = require('./routes/category_db');
 const uploadsRouter = require("./routes/uploads")
 const tableRouter = require('./routes/tables');
 //const userRouter = require('./routes/user');
@@ -26,7 +27,7 @@ const app = express();
 passportConfig();
 app.set('port', process.env.PORT || 3000);
 app.set('view engine', 'html');
-nunjucks.configure('views', {
+nunjucks.configure('./views', {
     express: app,
     watch: true,
 });
@@ -74,7 +75,8 @@ app.use(passport.session());
 
 app.use('/', pageRouter);
 app.use('/auth', authRouter);
-app.use('/post_upload', post_uploadRouter);
+app.use('/post_upload', post_db_Router);
+app.use('/category_db', category_db_Router);
 app.use('/uploads', uploadsRouter);
 app.use('/tables', tableRouter);
 //app.use('/user', userRouter);
