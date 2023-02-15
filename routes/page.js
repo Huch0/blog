@@ -37,8 +37,15 @@ router.get('/programming_home', (req, res) => {
 });
 
 
-router.get('/editor', isLoggedIn, (req, res) => {
-    res.render('editor', { title: '글작성' }); ///->
+router.get('/editor/:type', isLoggedIn, (req, res) => {
+    
+    const type = req.params.type;
+    if (type === 'edit') {
+        res.render('editor', { title: '수정' });
+    } else {
+        res.render('editor', { title: '작성' });
+    };
+    //res.render('editor', { title: '작성' });
 });
 
 /*

@@ -21,11 +21,15 @@
     <tr>
         <th>ID</th>
         <th>name</th>
+        <th>action</th>
     </tr>
     {% for category_1 in categories_1 %}
     <tr>
         <td>{{ category_1.id }}</td>
         <td>{{ category_1.name }}</td>
+        <td>
+            <button class="btn btn-danger" onclick="deleteCategory_1('{{ category_1.id | escape }}')">Delete</button>
+        </td>
     </tr>
     </tr>
     {% endfor %}
@@ -45,12 +49,16 @@
         <th>ID</th>
         <th>Category_1 ID</th>
         <th>name</th>
+        <th>action</th>
     </tr>
     {% for category_2 in categories_2 %}
     <tr>
         <td>{{ category_2.id }}</td>
         <td>{{ category_2.Category1Id }}</td>
         <td>{{ category_2.name }}</td>
+        <td>
+            <button class="btn btn-danger" onclick="deleteCategory_2('{{ category_2.id | escape }}')">Delete</button>
+        </td>
     </tr>
     </tr>
     {% endfor %}
@@ -117,7 +125,39 @@
         </td>
     </tr>
     {% endfor %}
+
 </table>
+
+<form id="post_search_form">
+    <div class="mb-3 d-flex">
+        <div class="form-group mr-3">
+            <label class="form-label">검색 타입</label>
+            <div class="dropdown">
+                <button id="searchType_dropdown" class="btn btn-secondary dropdown-toggle" type="button"
+                    data-bs-toggle="dropdown" aria-expanded="false">검색 타입</button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" onclick="changeValue('All')">All</a></li>
+                    <li><a class="dropdown-item" onclick="changeValue('User')">User</a></li>
+                    <li><a class="dropdown-item" onclick="changeValue('Title')">Title</a></li>
+                    <li><a class="dropdown-item" onclick="changeValue('Category')">Category</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-label">검색어</label>
+            <input class="form-control" id="searchTerm">
+        </div>
+        <div class="form-group">
+            <label class="form-label">페이지 당 보여줄 개수</label>
+            <input class="form-control" id="numberOfResults">
+        </div>
+        <div class="form-group">
+            <label class="form-label">페이지</label>
+            <input class="form-control" id="page">
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
 
 <table class="table">
     <h1 class="text-center my-5">삭제된 게시글</h1>
@@ -150,7 +190,18 @@
 
 <!-- axios.js-->
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<!-- Latest compiled and minified CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Latest compiled JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+    function changeValue(value) {
+        const btn = document.getElementById("searchType_dropdown");
+        btn.innerHTML = value;
+        console.log("Selected value:", value);
+    }
+
     const category1_form = document.querySelector('#category1_form');
     category1_form.addEventListener('submit', (event) => {
         event.preventDefault();
@@ -202,10 +253,13 @@
             });
     });
 
-    //Delete Post
+    function updatePost(postId) {
+        window.location.href = '/editor/edit?postId=' + postId;
+    };
+
     async function deletePost(postId) {
         try {
-            await axios.delete('/post_upload/delete/' + postId);
+            await axios.delete(`/post_db/delete/${postId}`);
             // After the post has been deleted, you can reload the page or remove the row from the table without reloading the page.
             location.reload();
         } catch (error) {
@@ -213,4 +267,53 @@
         }
     };
 
+    const deleteCategory_1 = async (id) => {
+        try {
+            await axios.delete('/category_db/deleteCategory_1/' + id);
+            // After the post has been deleted, you can reload the page or remove the row from the table without reloading the page.
+            location.reload();
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const deleteCategory_2 = async (id) => {
+        try {
+            await axios.delete('/category_db/deleteCategory_2/' + id);
+            // After the post has been deleted, you can reload the page or remove the row from the table without reloading the page.
+            location.reload();
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const post_search_form = document.querySelector('#post_search_form');
+    post_search_form.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        const searchType = post_search_form.querySelector('#searchType_dropdown').innerHTML;
+        const searchTerm = post_search_form.querySelector('#searchTerm').value;
+        const numberOfResults = post_search_form.querySelector('#numberOfResults').value;
+        const page = post_search_form.querySelector('#page').value;
+
+        console.log(searchType, searchTerm, numberOfResults, page);
+
+        if (!searchType || !searchTerm || !numberOfResults || !page) {
+            alert('검색 Form을 모두 채우세요');
+            return;
+        }
+
+        const query = `searchType=${searchType}&searchTerm=${searchTerm}&numberOfResults=${numberOfResults}&page=${page}`;
+
+        axios.get(`/post_db/search?${query}`)
+            .then(response => {
+                console.log(response.data);
+                window.location.href = "/tables/database";
+            })
+            .catch(error => {
+                console.error(error);
+                alert("Failed to retrieve posts. Please try again later.");
+            });
+
+    });
 </script>

@@ -75,7 +75,7 @@ app.use(passport.session());
 
 app.use('/', pageRouter);
 app.use('/auth', authRouter);
-app.use('/post_upload', post_db_Router);
+app.use('/post_db', post_db_Router);
 app.use('/category_db', category_db_Router);
 app.use('/uploads', uploadsRouter);
 app.use('/tables', tableRouter);

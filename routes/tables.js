@@ -25,7 +25,8 @@ router.get('/database', async (req, res) => {
 
     
     let test = '';
-    //console.log(test);
+    
+    //console.log(category);
     
 
     res.render('tables', { users, posts, categories_1, categories_2, deleted_posts, test });

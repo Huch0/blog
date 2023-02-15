@@ -5,24 +5,33 @@
     2. 카테고리 dropdown버튼이 작동하게 변경
     3. 취소 버튼 누르면 이전 페이지로 돌아감
 */
-let licenseKey = null;
 
-$.ajax({
-    url: 'http://localhost:3000/getLicenseKey',
-    type: 'GET',
-    success: function (data) {
-        licenseKey = data.licenseKey;
-    }
-});
 
+
+let category_ids = {};
 window.onload = () => {
-    axios
-        .get('/category_db/category_dropdown')
+    const urlParams = new URLSearchParams(window.location.search);
+    const postId = urlParams.get('postId');
+    if (postId) {
+        axios.get(`/post_db/${postId}`)
+            .then(res => {
+                console.log(res);
+                /*
+                const titleInput = document.getElementById('title');
+                const descriptionInput = document.getElementById('description');
+                titleInput.value = data.title;
+                descriptionInput.value = data.description;
+                */
+            })
+            .catch(error => console.error(error));
+    }
+    axios.get('/category_db/category_dropdown')
         .then(response => {
             const category_dropdown_menu = document.querySelector('#category_dropdown_menu');
 
             //console.log(response.data.generated_menu); 
             category_dropdown_menu.innerHTML = response.data.generated_menu;
+            category_ids = response.data.generated_ids;
         })
         .catch(error => {
             console.error(error);
@@ -222,7 +231,6 @@ delete_all_imgs_btn.addEventListener('click', (event) => {
 
 
 
-const ids = [' ', 'Web', 'AI', 'Descrete', 'TOEFL', 'Debate'];
 // 게시글 작성 버튼 
 const submit_btn = document.querySelector("#submit_btn");
 
@@ -243,7 +251,8 @@ submit_btn.addEventListener('click', event => {
         alert('카테고리 고르세요');
         return;
     }
-    const category2_id = ids.indexOf(category);
+    //console.log('category : ', category);
+    const category2_id = category_ids[category];
 
     try {
         const thumbnail_url = document.querySelector("#prev_thumbnail img").src;
@@ -272,7 +281,7 @@ function sendDataToServer(title_input, description_input, thumbnail_url, categor
     formData.append('thumbnail_url', thumbnail_url);
     formData.append('category2_id', category2_id);
     formData.append('content', editor_content);
-    axios.post('/post_upload/', formData)
+    axios.post('/post_db/', formData)
         .then((res) => {
             console.log('Post succeeded');
             console.log(res);
