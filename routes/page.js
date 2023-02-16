@@ -41,9 +41,9 @@ router.get('/editor/:type', isLoggedIn, (req, res) => {
     
     const type = req.params.type;
     if (type === 'edit') {
-        res.render('editor', { title: '수정' });
+        res.render('editor', { title: 'edit' });
     } else {
-        res.render('editor', { title: '작성' });
+        res.render('editor', { title: 'post' });
     };
     //res.render('editor', { title: '작성' });
 });

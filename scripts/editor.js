@@ -8,23 +8,30 @@
 
 
 
+const urlParams = new URLSearchParams(window.location.search);
+const postId = urlParams.get('postId');
 let category_ids = {};
 window.onload = () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const postId = urlParams.get('postId');
     if (postId) {
-        axios.get(`/post_db/${postId}`)
+        axios.get(`/post_db/edit/${postId}`)
             .then(res => {
                 console.log(res);
-                /*
-                const titleInput = document.getElementById('title');
-                const descriptionInput = document.getElementById('description');
-                titleInput.value = data.title;
-                descriptionInput.value = data.description;
-                */
+
+                const title_input = document.getElementById('title_input');
+                const description_input = document.getElementById('description_input');
+                title_input.value = res.data.post.title;
+                description_input.value = res.data.post.description;
+
+                const thumbnail_container = document.querySelector('#thumbnail_container');
+                const prev_img = createImgPreview("prev_thumbnail", res.data.post.thumbnail_url, res.data.post.thumbnail_url, 0);
+                console.log(prev_img);
+                thumbnail_container.appendChild(prev_img);
+
+                ckeditor.setData(res.data.fileContents);
             })
             .catch(error => console.error(error));
     }
+
     axios.get('/category_db/category_dropdown')
         .then(response => {
             const category_dropdown_menu = document.querySelector('#category_dropdown_menu');
@@ -36,6 +43,7 @@ window.onload = () => {
         .catch(error => {
             console.error(error);
         });
+
 };
 
 
@@ -234,44 +242,48 @@ delete_all_imgs_btn.addEventListener('click', (event) => {
 // 게시글 작성 버튼 
 const submit_btn = document.querySelector("#submit_btn");
 
-submit_btn.addEventListener('click', event => {
-    event.preventDefault();
+if (submit_btn) {
+    submit_btn.addEventListener('click', event => {
+        event.preventDefault();
 
-    const title_input = document.querySelector("#title_input").value;
-    const description_input = document.querySelector("#description_input").value;
-    const category = document.querySelector('#category_dropdown').innerHTML;
+        const title_input = document.querySelector("#title_input").value;
+        const description_input = document.querySelector("#description_input").value;
+        const category = document.querySelector('#category_dropdown').innerHTML;
 
-    if (!title_input) {
-        alert('제목 채우세요');
-        return;
-    } else if (!description_input) {
-        alert('설명 채우세요');
-        return;
-    } else if (category == 'Category') {
-        alert('카테고리 고르세요');
-        return;
-    }
-    //console.log('category : ', category);
-    const category2_id = category_ids[category];
-
-    try {
-        const thumbnail_url = document.querySelector("#prev_thumbnail img").src;
-
-        console.log(title_input, description_input, thumbnail_url, category, category2_id);
-
-        // Get the data from the CKEditor 5 instance
-        const editor_content = ckeditor.getData();
-
-        // Send the data to the server
-        sendDataToServer(title_input, description_input, thumbnail_url, category2_id, editor_content);
-    } catch (error) {
-        if (!document.querySelector("#prev_thumbnail img")) {
-            alert('썸네일 고르세요');
+        if (!title_input) {
+            alert('제목 채우세요');
+            return;
+        } else if (!description_input) {
+            alert('설명 채우세요');
+            return;
+        } else if (category == 'Category') {
+            alert('카테고리 고르세요');
+            return;
         }
-        console.error(error);
-    }
+        //console.log('category : ', category);
+        const category2_id = category_ids[category];
 
-});
+        try {
+            const thumbnail_url = document.querySelector("#prev_thumbnail img").src;
+
+            console.log(title_input, description_input, thumbnail_url, category, category2_id);
+
+            // Get the data from the CKEditor 5 instance
+            const editor_content = ckeditor.getData();
+
+            // Send the data to the server
+            sendDataToServer(title_input, description_input, thumbnail_url, category2_id, editor_content);
+        } catch (error) {
+            if (!document.querySelector("#prev_thumbnail img")) {
+                alert('썸네일 고르세요');
+            }
+            console.error(error);
+        }
+
+    });
+
+}
+
 
 function sendDataToServer(title_input, description_input, thumbnail_url, category2_id, editor_content) {
     const formData = new FormData();
@@ -292,18 +304,68 @@ function sendDataToServer(title_input, description_input, thumbnail_url, categor
         });
 };
 
+// 수정 버튼 
+const edit_btn = document.querySelector("#edit_btn");
+if (edit_btn) {
+    edit_btn.addEventListener('click', event => {
+        event.preventDefault();
+        //console.log('edit_btn clicked');
+
+        const title_input = document.querySelector("#title_input").value;
+        const description_input = document.querySelector("#description_input").value;
+        const category = document.querySelector('#category_dropdown').innerHTML;
+
+        if (!title_input) {
+            alert('제목 채우세요');
+            return;
+        } else if (!description_input) {
+            alert('설명 채우세요');
+            return;
+        } else if (category == 'Category') {
+            alert('카테고리 고르세요');
+            return;
+        }
+        //console.log('category : ', category);
+        const category2_id = category_ids[category];
+
+        try {
+            const thumbnail_url = document.querySelector("#prev_thumbnail img").src;
+
+            console.log(title_input, description_input, thumbnail_url, category, category2_id);
+
+            // Get the data from the CKEditor 5 instance
+            const editor_content = ckeditor.getData();
+
+            // Send the data to the server
+            updatePost(postId, title_input, description_input, thumbnail_url, category2_id, editor_content);
+        } catch (error) {
+            if (!document.querySelector("#prev_thumbnail img")) {
+                alert('썸네일 고르세요');
+            }
+            console.error(error);
+        }
+
+    });
+}
+
 // Update Post
-const updatePost = async (postId, dbUpdates, contentUpdates) => {
+const updatePost = async (postId, title_input, description_input, thumbnail_url, category2_id, editor_content) => {
     try {
-        const response = await axios.post(`/update/${postId}`, {
-            db_updates: dbUpdates,
-            content_updates: contentUpdates
-        });
-        return response.data;
+      const response = await axios.put(`/post_db/update/${postId}`, {
+        title: title_input,
+        description: description_input,
+        thumbnail_url: thumbnail_url,
+        category2_id: category2_id,
+        content: editor_content
+      });
+      console.log(response.data);
+      window.location.href = `/`;
+      // Optionally, redirect to the post detail page or display a success message to the user
     } catch (error) {
-        console.error(error);
+      console.error(error);
+      // Optionally, display an error message to the user
     }
-};
+  };
 
 const dbUpdates = {
     title: "New Title",

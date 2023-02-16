@@ -72,14 +72,39 @@ router.post('/', isLoggedIn, upload2.none(), async (req, res, next) => {
   }
 });
 
-router.get('/:id', async (req, res, next) => {
+router.get('/edit/:id', async (req, res, next) => {
   const id = req.params.id;
 
   console.log('post-id Router activated : ', id);
 
   Post.findOne({ where: { id } })
     .then((post) => {
-      res.json(post);
+      const fileName = `./views/posts/${post.id}.html`;
+      // Check if file exists
+      fs.access(fileName, fs.F_OK, (err) => {
+        if (err) {
+          console.log(fileName, "file doesn't exist");
+          // If file doesn't exist, render edit page using nunjucks template
+          res.render('editor', { title: 'edit' });
+        } else {
+          // If file exists, read the file and send its contents to the client
+          fs.readFile(fileName, 'utf-8', (err, data) => {
+            if (err) {
+              console.error(err);
+              res.status(500).json({ message: 'Error retrieving post' });
+            } else {
+              const responseObj = {
+                post: post,
+                fileContents: data
+              };
+              // Send the response in JSON format
+              res.json(responseObj);
+              //res.send(data);
+              //res.json(post);
+            }
+          });
+        }
+      });
     })
     .catch((error) => {
       console.error(error);
@@ -188,26 +213,37 @@ router.get('/search', async (req, res, next) => {
 //Update
 router.put('/update/:postId', async (req, res, next) => {
   const postId = req.params.postId;
-  const db_updates = req.body.db_updates;
-  const content_updates = req.body.content_updates;
-  const filePath = `./views/posts/${postId}.html`;
+  const title = req.body.title.replace(/<[^>]*>/g, '');
+  const description = req.body.description;
+  const thumbnail_url = req.body.thumbnail_url;
+  const category2_id = req.body.category2_id;
+  const content = req.body.content;
+
+  const fileName = postId + ".html";
+  const filePath = path.join(__dirname, '../views/posts', fileName);
 
   try {
     // 1. Update the values in the database
-    const result = await Post.update(db_updates, { where: { id: postId } });
+    const result = await Post.update({
+      title: title,
+      description: description,
+      thumbnail_url: thumbnail_url,
+      category2_id: category2_id,
+    }, {
+      where: {
+        id: postId
+      }
+    });
     if (!result[0]) {
       return res.status(404).json({
         message: 'The post could not be found.'
       });
     }
 
-    // 2. Update the HTML file
-    // Read the current contents of the file
-    const fileContents = fs.readFileSync(filePath, 'utf-8');
-    // Use the updates to update the file contents
-    const updatedFileContents = fileContents.replace(content_updates);
+    console.log('updated contents : ', content);
+
     // Write the updated contents back to the file
-    fs.writeFileSync(filePath, updatedFileContents);
+    fs.writeFileSync(filePath, content);
 
     // 3. Send a response
     return res.status(200).json({
