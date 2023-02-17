@@ -16,16 +16,75 @@
 
 </head>
 
-<body>
+<body> 
   <!-- Jumbotron -->
-  <a class="navbar-brand" href="/">
-    <div class="jumbotron text-center">
-      <h1 class="life">CANU</h1>
-      <p>Climb All New Apaxes</p>
-    </div>
-  </a>
+  
 
-  <!-- NavBar -->
+  <div id="home_screen" class="container-fluid">
+    <nav class="navbar fixed-top">
+      <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar">
+          <span id="toggler_icon" class="navbar-toggler-icon"></span>
+        </button>
+        
+        <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">Dark offcanvas</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Link</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Dropdown
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark">
+                  <li><a class="dropdown-item" href="#">Action</a></li>
+                  <li><a class="dropdown-item" href="#">Another action</a></li>
+                  <li>
+                    <hr class="dropdown-divider">
+                  </li>
+                  <li><a class="dropdown-item" href="#">Something else here</a></li>
+                </ul>
+              </li>
+            </ul>
+            <form class="d-flex mt-3" role="search">
+              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+              <button class="btn btn-success" type="submit">Search</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div id="home_jumbotron" class="container d-flex flex-column justify-content-end">
+      <a class="navbar-brand" href="/">
+        <div class="jumbotron text-center">
+          <h1 id="blog_name" class="display-1">CANU</h1>
+          <p class="lead">Climb All New Apaxes</p>
+        </div>
+      </a>
+    </div>
+      
+    <div class="album py-5">
+      <div class="container">
+        <p id="최신글 4개">최신글 4개</p>
+        <div id="search_result" class="row">
+        </div>
+      </div>
+    </div>
+    <a href="#최신글 4개">최신글 4개로 이동</a>
+    <button type="button" class="btn btn-warning" id="goToDB">DB 보러가기</button>
+
+  </div>
+
+  <!-- NavBar 
   <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
       <span class="navbar-toggler-icon"></span>
@@ -33,7 +92,7 @@
     <div class="collapse navbar-collapse justify-content-center" id="collapsibleNavbar">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link my-nav-link" href="/programming_home">Programming</a>
+          <a class="nav-link my-nav-link" href="/code_home">Code</a>
         </li>
         <li class="nav-item">
           <a class="nav-link my-nav-link" href="#">Math</a>
@@ -51,8 +110,8 @@
     <a href="/login" class="btn btn-outline-success" role="button" aria-disabled="true">로그인</a>
     <a href="/auth/logout" class="btn btn-secondary" role="button" aria-disabled="true">로그아웃</a>
   </nav>
-  <!-- Search Bar -->
-  <!--
+  -->
+  <!-- Search Bar 
   <div class="container text-center">
     
     <nav class="navbar navbar-expand-sm bg-white navbar-white justify-content-center">
@@ -71,17 +130,10 @@
     </nav>
     <button type="button" class="btn btn-primary" id="goToDB">DB 보러가기</button>
   </div>
--->
-  <button type="button" class="btn btn-primary" id="goToDB">DB 보러가기</button>
-  <div class="album py-5 bg-light">
-    <div class="container">
-      <div id="text"></div>
 
-      <br>
-      <div id="joo" class="row">
-      </div>
-    </div>
-  </div>
+  -->
+  <!-- axios-->
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script type="text/javascript" src="../scripts/main.js"></script>
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">

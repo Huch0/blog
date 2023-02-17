@@ -121,20 +121,19 @@ router.get('/search', async (req, res, next) => {
   const numberOfResults = parseInt(query.numberOfResults, 10);
   const page = parseInt(query.page, 10);
 
-  console.log('post-search Router activated : ', searchType, searchTerm, numberOfResults, page);
+  //console.log('post-search Router activated : ', searchType, searchTerm, numberOfResults, page);
 
   try {
     let posts;
 
     if (searchType === 'All') {
-      console.log('searchType : All');
+      //console.log('searchType : All');
       // Find all posts, ordered by id in descending order
       posts = await Post.findAll({
         order: [['id', 'DESC']],
         limit: numberOfResults,
         offset: (page - 1) * numberOfResults
       });
-      console.log(posts);
     } else if (searchType === 'User') {
 
       console.log('searchType : User', searchTerm);
@@ -199,7 +198,7 @@ router.get('/search', async (req, res, next) => {
       });
     }
 
-    console.log(posts);
+    //console.log(posts);
     res.status(200).json({ posts });
   } catch (error) {
     return res.status(500).json({
@@ -221,6 +220,7 @@ router.put('/update/:postId', async (req, res, next) => {
 
   const fileName = postId + ".html";
   const filePath = path.join(__dirname, '../views/posts', fileName);
+  console.log(postId, title, description, thumbnail_url, category2_id, content, fileName, filePath);
 
   try {
     // 1. Update the values in the database
@@ -234,6 +234,7 @@ router.put('/update/:postId', async (req, res, next) => {
         id: postId
       }
     });
+    console.log('result : ', result);
     if (!result[0]) {
       return res.status(404).json({
         message: 'The post could not be found.'

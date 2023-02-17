@@ -1,17 +1,31 @@
-.life {
-    font-size: 75px;
+:root {
+    --main-color: #356395;
+    --sub-color: #C0D4E9;
 }
 
-.jumbotron {
-    margin-bottom: 0;
-    padding-top: 32px;
-    padding-bottom: 0;
-    background-color: white;
+
+html,
+body {
+    height: 100%;
+    margin: 0;
 }
 
-.my-nav-link {
-    font-size: 20px !important;
-    padding: 5px 20px !important;
+#post_title {
+    font-family: 'NanumGothicBold';
+}
+
+#home_screen {
+    background-color: var(--main-color);
+    height: 100%;
+}
+
+#home_jumbotron {
+    height: 300px;
+}
+
+#blog_name {
+    font-family: "Montserrat";
+    color: var(--sub-color);
 }
 
 .search-area {

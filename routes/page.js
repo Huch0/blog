@@ -32,8 +32,8 @@ router.get('/getLicenseKey', isLoggedIn, (req, res) => {
     res.json({ licenseKey: process.env.CKEDITOR_LICENSE });
 });
 
-router.get('/programming_home', (req, res) => {
-    res.render('programming_home', { title: '프로그래밍' });
+router.get('/code_home', (req, res) => {
+    res.render('code_home', { title: 'code' });
 });
 
 
@@ -64,7 +64,7 @@ router.get('/post/:id', (req, res) => {
     Post.findOne({ where: { id: post_id } })
         .then((post) => {
             console.log(post.dataValues);
-            console.log('/posts/' + post_id);
+            console.log('/post/' + post_id);
 
             res.render('post', { id: post.id, author: post.UserId, date: format_date(post.createdAt), title: post.title, description: post.description, post_path: './posts/' + post_id + '.html' });
         })
