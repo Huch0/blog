@@ -66,7 +66,7 @@ router.get('/post/:id', (req, res) => {
             console.log(post.dataValues);
             console.log('/post/' + post_id);
 
-            res.render('post', { id: post.id, author: post.UserId, date: format_date(post.createdAt), title: post.title, description: post.description, post_path: './posts/' + post_id + '.html' });
+            res.render('post', { id: post.id, author: post.UserId, date: format_date(post.createdAt), title: post.title, description: post.description, thumbnail_url: post.thumbnail_url, post_path: './posts/' + post_id + '.html' });
         })
         .catch((error) => {
             console.error(error);

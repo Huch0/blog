@@ -1,6 +1,6 @@
 :root {
-    --main-color: #356395;
-    --sub-color: #C0D4E9;
+    --main-color: #FFFFFF;
+    --sub-color: #000000;
 }
 
 
@@ -8,6 +8,22 @@ html,
 body {
     height: 100%;
     margin: 0;
+}
+
+.directory_path:hover {
+    text-decoration: underline;
+}
+
+#search_result {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+
+#thumbnail_showcase img {
+    width: 800px;
+    height: 450px;
 }
 
 #post_title {
@@ -23,10 +39,11 @@ body {
     height: 300px;
 }
 
+
 #blog_name {
-    font-family: "Montserrat";
     color: var(--sub-color);
 }
+
 
 .search-area {
     position: relative;
@@ -58,18 +75,12 @@ body {
 
 /* --------- EDITOR STYLES  ---------------------------------------------------------------------------------------- */
 
-
 #prev_img img {
     height: 60px;
     width: 60px;
 }
 
 #prev_thumbnail img {
-    height: 300px;
-    width: 300px;
-}
-
-img {
     height: 300px;
     width: 300px;
 }
