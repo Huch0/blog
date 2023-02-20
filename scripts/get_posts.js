@@ -34,45 +34,38 @@ const get_posts = (searchType, searchTerm, numberOfResults, page) => {
             });
     });
 };
-function createDiv(path, imgSrc, category_2, title, description, user, date, views) {
+function createDiv(path, imgSrc, Category2Id, title, description, UserId, date, views) {
+    const author = tables.user_table[UserId];
+    console.log('tables : ', tables);
+
+    const searchCategoryId = Category2Id; 
+    const categoryTable = tables.category_table;
+    let categoryName1, categoryName2;
+
+    for (const key in categoryTable) {
+        if (Object.hasOwnProperty.call(categoryTable, key)) {
+            const category1 = categoryTable[key];
+            const category2Table = category1.category2_table;
+            if (Object.keys(category2Table).includes(searchCategoryId.toString())) {
+                categoryName1 = category1.name;
+                categoryName2 = category2Table[searchCategoryId];
+                break;
+            }
+        }
+    }
+    const category = categoryName1 + ' / ' + categoryName2;
+
     return `
-        <div class="card p-0" style="width: 20rem;">
+        <div class="card p-0 m-4" style="width: 20rem;">
             <a class="nav-link" href="/${path}">
                 <img src="${imgSrc}" class="card-img-top" alt="thumbnail" style="height: 180px;">
                 <div class="card-body">
-                    <p class="card-text mb-2 text-muted">${category_2}</p>
-                    <h5 class="card-title">${title}</h5>
-                    <p class="card-text">${description}</p>
-                    <p class="card-text mb-2 text-muted">by ${user} - ${date}</p>
-                    <p class="card-text mb-2 text-muted">${views} views</p>
+                    <p id="cat_text" class="card-text mb-2 text-muted">${category}</p>
+                    <h5 id="title_text" class="card-title">${title}</h5>
+                    <p id="description_text" class="card-text">${description}</p>
+                    <p id="author_text" class="card-text mb-2 text-muted">by ${author} - ${date}</p>
                 </div>
             </a>
         </div>
     `;
-}
-/*
-`
-        <div class="card" style="width: 20rem;">
-            <a class="nav-link" href="/${path}">
-                <img src="${imgSrc}" class="card-img-top" alt="thumbnail">
-                <div class="card-body">
-                    <p class="card-text mb-2 text-muted">${category_2}</p>
-                    <h5 class="card-title">${title}</h5>
-                    <p class="card-text">${description}</p>
-                    <p class="card-text mb-2 text-muted">by ${user} - ${date}</p>
-                    <p class="card-text mb-2 text-muted">${views} views</p>
-                </div>
-            </a>
-        </div>
-    `;
-    */
-/*
-<div class="card" style="width: 20rem;">
-     <img src="http://localhost:3000/img/1676708324761.png" class="card-img-top" alt="thumbnail" style="height: 180px;">  
-     <div class="card-body">
-       <h5 class="card-title">Card title</h5>
-       <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-       <a href="#" class="btn btn-primary">Go somewhere</a>
-     </div>
-   </div>
-*/
+};

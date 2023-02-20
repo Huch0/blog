@@ -270,9 +270,16 @@ if (submit_btn) {
 
             // Get the data from the CKEditor 5 instance
             const editor_content = ckeditor.getData();
+            // Find all <h> tags and add an id attribute with the text content
+            const modifiedContent = editor_content.replace(/<h([1-6])>([^<]+)<\/h\1>/g, function (match, tagLevel, tagText) {
+                const idText = tagText.trim().replace(/\s+/g, '-'); // Convert tag text to id format
+                return `<h${tagLevel} id="${idText}">${tagText}</h${tagLevel}>`;
+            });
+
+            console.log(modifiedContent);
 
             // Send the data to the server
-            sendDataToServer(title_input, description_input, thumbnail_url, category2_id, editor_content);
+            sendDataToServer(title_input, description_input, thumbnail_url, category2_id, modifiedContent);
         } catch (error) {
             if (!document.querySelector("#prev_thumbnail img")) {
                 alert('썸네일 고르세요');
@@ -351,21 +358,21 @@ if (edit_btn) {
 // Update Post
 const updatePost = async (postId, title_input, description_input, thumbnail_url, category2_id, editor_content) => {
     try {
-      const response = await axios.put(`/post_db/update/${postId}`, {
-        title: title_input,
-        description: description_input,
-        thumbnail_url: thumbnail_url,
-        category2_id: category2_id,
-        content: editor_content
-      });
-      console.log(response.data);
-      window.location.href = `/`;
-      // Optionally, redirect to the post detail page or display a success message to the user
+        const response = await axios.put(`/post_db/update/${postId}`, {
+            title: title_input,
+            description: description_input,
+            thumbnail_url: thumbnail_url,
+            category2_id: category2_id,
+            content: editor_content
+        });
+        console.log(response.data);
+        window.location.href = `/`;
+        // Optionally, redirect to the post detail page or display a success message to the user
     } catch (error) {
-      console.error(error);
-      // Optionally, display an error message to the user
+        console.error(error);
+        // Optionally, display an error message to the user
     }
-  };
+};
 
 const dbUpdates = {
     title: "New Title",

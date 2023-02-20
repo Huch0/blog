@@ -8,6 +8,7 @@ const Post = require('../models/post');
 const Category_1 = require('../models/category_1');
 const Category_2 = require('../models/category_2');
 
+
 router.get('/database', async (req, res) => {
   try {
     const users = await User.findAll();

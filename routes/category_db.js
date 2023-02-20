@@ -90,6 +90,35 @@ router.delete('/deleteCategory_2/:id', async (req, res, next) => {
   }
 });
 
+router.get('/category_table', async (req, res) => {
+  try {
+    const categories_1 = await Category_1.findAll();
+    const categories_2 = await Category_2.findAll();
+
+    const all_categories = {};
+
+    categories_1.forEach(category_1 => {
+      const category2_table = {};
+
+      categories_2.forEach(category_2 => {
+        if (category_2.Category1Id === category_1.id) {
+          category2_table[category_2.id] = category_2.name;
+        }
+      });
+
+      all_categories[category_1.id] = {
+        name: category_1.name,
+        category2_table: category2_table
+      };
+    });
+
+    // Send the response in JSON format
+    res.json(all_categories);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Failed to get all category1');
+  }
+});
 
 router.get('/category_dropdown', async (req, res) => {
   try {

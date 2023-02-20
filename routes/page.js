@@ -6,8 +6,8 @@ function format_date(date_str) {
     let date = new Date(date_str);
     let formattedDate = date.getFullYear() + "." + (date.getMonth() + 1).toString().padStart(2, "0") + "." + date.getDate().toString().padStart(2, "0");
     return formattedDate;
-  }
-  
+}
+
 const router = express.Router();
 
 router.use((req, res, next) => {
@@ -38,7 +38,7 @@ router.get('/code_home', (req, res) => {
 
 
 router.get('/editor/:type', isLoggedIn, (req, res) => {
-    
+
     const type = req.params.type;
     if (type === 'edit') {
         res.render('editor', { title: 'edit' });
@@ -60,17 +60,27 @@ router.get('/post/:id', (req, res) => {
     post_id = req.params.id;
     console.log('GET /post/:id ROUTER STARTED', post_id);
 
+
     // Find the post in the database using the "id" value
     Post.findOne({ where: { id: post_id } })
         .then((post) => {
-            console.log(post.dataValues);
             console.log('/post/' + post_id);
 
-            res.render('post', { id: post.id, author: post.UserId, date: format_date(post.createdAt), title: post.title, description: post.description, thumbnail_url: post.thumbnail_url, post_path: './posts/' + post_id + '.html' });
-        })
-        .catch((error) => {
-            console.error(error);
-        });
+
+            User.findOne({ where: { id: post.UserId } })
+                .then((user) => {
+                    res.render('post', { id: post.id, author_id: post.UserId, author: user.nick, date: format_date(post.createdAt), title: post.title, description: post.description, thumbnail_url: post.thumbnail_url, post_path: './posts/' + post_id + '.html' });
+            })
+            .catch((error) => {
+                console.error(error);
+
+            });
+
+
+    })
+    .catch((error) => {
+        console.error(error);
+    });
     // If the post is found, define the post path
 });
 
