@@ -27,15 +27,7 @@ router.post('/', isLoggedIn, upload2.none(), async (req, res, next) => {
     const content = req.body.content;
 
     // Get the latest post from the database
-    const latestPost = await Post.findOne({
-      order: [['id', 'DESC']]
-    });
-
-    // Get the latest post id
-    let latestPostId = 0;
-    if (latestPost) {
-      latestPostId = latestPost.id;
-    }
+    const latestPostId = await Post.max('id', { paranoid: false });
 
     // Generate the file name using the latest post id
     const post_id = `${latestPostId + 1}`;

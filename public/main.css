@@ -13,6 +13,8 @@ body {
 #home_screen {
     background-color: var(--main-color);
     height: 100%;
+    justify-content: center;
+    max-width: 1500px;
 }
 
 .directory_path:hover {
@@ -67,6 +69,7 @@ body {
 #search_result {
     justify-content: center;
     justify-items: center;
+    margin: 0 auto; /* added */
 }
 
 

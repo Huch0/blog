@@ -1,6 +1,6 @@
 const express = require('express');
 const { isLoggedIn, isNotLoggedIn } = require('./is_logged_in');
-const { Post, User } = require('../models');
+const { Post, User, Category_2 } = require('../models');
 
 function format_date(date_str) {
     let date = new Date(date_str);
@@ -32,8 +32,56 @@ router.get('/getLicenseKey', isLoggedIn, (req, res) => {
     res.json({ licenseKey: process.env.CKEDITOR_LICENSE });
 });
 
-router.get('/code_home', (req, res) => {
-    res.render('code_home', { title: 'code' });
+router.get('/Code', async (req, res) => {
+    const { subcategory, page } = req.query;
+    // db 구조 바꾸고나서 main category = Code로 정해야됨.
+
+    const limit = 8; // number of posts to retrieve per page
+ 
+
+    const offset = page ? (parseInt(page) - 1) * limit : 0;
+
+    // define the where clause based on the subcategory
+    let where = { deletedAt: null };
+    // db 구조 바꾸고나서 maincategory도 where에 포함 시켜야됨.
+
+    let subcategory_id = null;
+    if (subcategory && subcategory !== 'All') {
+        const data = await Category_2.findOne({
+            where: {
+                name : subcategory
+            }
+        });
+        subcategory_id = data.id;
+        //console.log('hey I am activated', subcategory, subcategory_id);
+    };
+    if (subcategory_id) {
+        //where.subcategory = subcategory;
+        where.Category2Id = subcategory_id;
+    }
+
+    const posts = await Post.findAll({
+        where,
+        offset,
+        limit,
+        order: [['createdAt', 'DESC']],
+        include: [{ model: User }],
+    });
+    const res_posts = JSON.stringify(posts);
+
+    const post_count = await Post.count({ where });
+
+    res.render('category_home', { category: 'Code', res_posts, post_count, subcategory, page });
+});
+
+router.get('/english_home', (req, res) => {
+    res.render('category_home', { category: 'English' });
+});
+router.get('/math_home', (req, res) => {
+    res.render('category_home', { category: 'Math' });
+});
+router.get('/toilet_home', (req, res) => {
+    res.render('category_home', { category: 'Toilet' });
 });
 
 
@@ -48,14 +96,6 @@ router.get('/editor/:type', isLoggedIn, (req, res) => {
     //res.render('editor', { title: '작성' });
 });
 
-/*
-router.get('/post', (req, res) => {
-    //DB 구현 후 , DB에서 게시글 경로를 불러옴.
-    post_path = "./posts/1.html"
-
-    res.render('post', { title: '게시글', post_path: post_path });
-});
-*/
 router.get('/post/:id', (req, res) => {
     post_id = req.params.id;
     console.log('GET /post/:id ROUTER STARTED', post_id);
@@ -70,17 +110,17 @@ router.get('/post/:id', (req, res) => {
             User.findOne({ where: { id: post.UserId } })
                 .then((user) => {
                     res.render('post', { id: post.id, author_id: post.UserId, author: user.nick, date: format_date(post.createdAt), title: post.title, description: post.description, thumbnail_url: post.thumbnail_url, post_path: './posts/' + post_id + '.html' });
-            })
-            .catch((error) => {
-                console.error(error);
+                })
+                .catch((error) => {
+                    console.error(error);
 
-            });
+                });
 
 
-    })
-    .catch((error) => {
-        console.error(error);
-    });
+        })
+        .catch((error) => {
+            console.error(error);
+        });
     // If the post is found, define the post path
 });
 
