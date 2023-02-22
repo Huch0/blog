@@ -1,6 +1,7 @@
 const express = require('express');
 const { isLoggedIn, isNotLoggedIn } = require('./is_logged_in');
 const { Post, User, Category_2 } = require('../models');
+const { Op } = require('sequelize');
 
 function format_date(date_str) {
     let date = new Date(date_str);
@@ -32,9 +33,10 @@ router.get('/getLicenseKey', isLoggedIn, (req, res) => {
     res.json({ licenseKey: process.env.CKEDITOR_LICENSE });
 });
 
-router.get('/Code', async (req, res) => {
-    const { subcategory, page } = req.query;
-    // db 구조 바꾸고나서 main category = Code로 정해야됨.
+router.get('/home/:category', async (req, res) => {
+    category = req.params.category;
+    const { subcategory, page, search_type, search_term } = req.query;
+    console.log("\nLOG / subcategory, page, search_type, search_term : ", subcategory, page, search_type, search_term);
 
     const limit = 8; // number of posts to retrieve per page
  
@@ -46,13 +48,14 @@ router.get('/Code', async (req, res) => {
     // db 구조 바꾸고나서 maincategory도 where에 포함 시켜야됨.
 
     let subcategory_id = null;
-    if (subcategory && subcategory !== 'All') {
+    if (subcategory) {
         const data = await Category_2.findOne({
             where: {
                 name : subcategory
             }
         });
-        subcategory_id = data.id;
+        if (data) 
+            subcategory_id = data.id;
         //console.log('hey I am activated', subcategory, subcategory_id);
     };
     if (subcategory_id) {
@@ -60,6 +63,21 @@ router.get('/Code', async (req, res) => {
         where.Category2Id = subcategory_id;
     }
 
+    if (search_type && search_term) {
+        if (search_type === '제목') {
+            where.title = { [Op.like]: `%${search_term}%` };
+        } else if (search_type === '작성자') {
+            const user = await User.findOne({
+                where: {
+                    nick: { [Op.like]: `%${search_term}%` }
+                }
+            });
+            if (user)
+                where.UserId = user.id;
+        }
+    }
+
+    console.log('LOG / where : ', where);
     const posts = await Post.findAll({
         where,
         offset,
@@ -71,7 +89,7 @@ router.get('/Code', async (req, res) => {
 
     const post_count = await Post.count({ where });
 
-    res.render('category_home', { category: 'Code', res_posts, post_count, subcategory, page });
+    res.render('category_home', { category, res_posts, post_count, subcategory, page });
 });
 
 router.get('/english_home', (req, res) => {
@@ -127,6 +145,7 @@ router.get('/post/:id', (req, res) => {
 
 
 router.get('/', async (req, res, next) => {
+    console.log('\nhome Router Activated');
     try {
         /*
         const posts = await Post.findAll({

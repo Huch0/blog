@@ -69,7 +69,7 @@ window.onload = () => {
       const subcategoryItem = document.createElement('li');
       const subcategoryLink = document.createElement('a');
       subcategoryLink.classList.add('link-dark', 'd-inline-flex', 'text-decoration-none', 'rounded');
-      subcategoryLink.setAttribute('href', `/${category.name}?subcategory=${subcategory}`);
+      subcategoryLink.setAttribute('href', `/home/${category.name}?subcategory=${subcategory}`);
       subcategoryLink.textContent = subcategory;
       subcategoryItem.appendChild(subcategoryLink);
       subcategoriesList.appendChild(subcategoryItem);

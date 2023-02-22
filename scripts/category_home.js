@@ -39,8 +39,14 @@ window.onload = () => {
         console.log('post', post);
         cardsHtml += createDiv(post.path, post.thumbnail_url, post.Category2Id, post.title, post.description, post.UserId, format_date(post.createdAt), "2400");
     }
-
-    search_result.innerHTML = cardsHtml;
+    if (!cardsHtml) {
+        search_result.innerHTML = 
+        `<div class="alert alert-warning" role="alert" style="margin-top:200px;margin-bottom:200px">
+          검색 결과가 없습니다 
+        </div>`;
+    } else {
+        search_result.innerHTML = cardsHtml;
+    }
 
     const listContainer = document.querySelector('#list_container');
     const category_btn_group = document.querySelector('#category_btn_group');
@@ -68,13 +74,13 @@ window.onload = () => {
             const subcategoryItem = document.createElement('li');
             const subcategoryLink = document.createElement('a');
             subcategoryLink.classList.add('link-dark', 'd-inline-flex', 'text-decoration-none', 'rounded');
-            subcategoryLink.setAttribute('href', `/${category.name}?subcategory=${subcategory}`);
+            subcategoryLink.setAttribute('href', `/home/${category.name}?subcategory=${subcategory}`);
             subcategoryLink.textContent = subcategory;
             subcategoryItem.appendChild(subcategoryLink);
             subcategoriesList.appendChild(subcategoryItem);
             
             if (category.name === current_category)
-                category_btn_group.appendChild(genrate_category_btns(subcategory, current_subcategory));
+                category_btn_group.appendChild(generate_category_btns(subcategory, current_subcategory));
         });
 
         // add the subcategories list to the collapse element
@@ -96,6 +102,44 @@ window.onload = () => {
 
     document.querySelector('#pagination_container').innerHTML = paginationHtml;
 };
+
+const search_form = document.querySelector('#search_form');
+let search_type = '';
+let search_term = '';
+
+const url = new URL(window.location.href);
+const params = new URLSearchParams(url.search);
+
+if (params.has('search_type')) 
+    changeValue(params.get('search_type'));
+if (params.has('search_term'))
+    document.querySelector('#search_input').value = params.get('search_term');
+
+
+search_form.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    console.log('Client LOG / search_form submitted');
+    // Get the current URL and create a URLSearchParams object from it
+    const url = new URL(window.location.href);
+    const params = new URLSearchParams(url.search);
+
+
+    search_type = document.querySelector('#search_dropdown').innerHTML;
+    search_term = document.querySelector('#search_input').value;
+
+
+    // Set the query parameter based on the search term
+    params.set('search_type', search_type);
+    params.set('search_term', search_term);
+
+    // Update the URL with the new query parameters
+    url.search = params.toString();
+    const newUrl = url.toString();
+
+    // Redirect the browser to the new URL
+    window.location.href = newUrl;
+});
 
 function generatePagination(totalPosts, currentPage, current_subcategory) {
     console.log('pagination func activated, totposts, currentapgae : ', totalPosts, currentPage);
@@ -161,7 +205,7 @@ function format_date(date_str) {
     return formattedDate;
 }
 
-const genrate_category_btns = (subcategory, current_subcategory) => {
+const generate_category_btns = (subcategory, current_subcategory) => {
     const category_btn = document.createElement('a');
     category_btn.classList.add('btn', 'btn-outline-info', 'm-1');
     if (current_subcategory === subcategory)
@@ -173,3 +217,10 @@ const genrate_category_btns = (subcategory, current_subcategory) => {
 
     return category_btn;
 };
+
+
+function changeValue(value) {
+    const btn = document.getElementById("search_dropdown");
+    btn.innerHTML = value;
+    console.log("Selected value:", value);
+}
