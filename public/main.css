@@ -143,6 +143,69 @@ body {
 #author_profile {
     margin-top: 300px;
 }
+#user_nick a{
+    text-decoration: none;
+    color: black;
+} 
+#user_nick a:hover {
+    text-decoration: underline;
+}
+#user_description {
+    font-size: 18px;
+}
+#prev_next_cards {
+    margin-top: 10px;
+}
+.pn_card  {
+    transition: all 0.2s ease-in-out;
+}
+.pn_card:hover{
+    transform: translateY(-10px);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+.pn_card a {
+    text-decoration: none;
+}
+.pn_title {
+    font-size: 20px;
+    font-weight: bold;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    color: black;
+}
+.pn_description {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    color: black;
+}
+
+
+#cat_text,
+#author_text {
+    height: 24px;
+    margin: 0;
+    text-overflow: ellipsis;
+    font-size: 0.875rem;
+}
+
+
+#description_text {
+    margin: 0;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    height: 3.9375rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
 .share-icon-wrapper {
     width: 36px;

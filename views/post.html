@@ -100,10 +100,10 @@
                         </svg>
                     </div>
                     <div class="col-md-auto d-flex flex-column justify-content-center">
-                        <a href="#">
-                            <div id="user_nick" class="fw-normal fs-2">{{author}}</div>
-                        </a>
-                        <div id="user_description" class="fw-normal fs-5">착한사람.</div>
+                            <div id="user_nick" class="fw-normal fs-2">
+                                <a href="#">{{author}}</a>
+                            </div>
+                        <div id="user_description" class="fw-normal">착한사람.</div>
                     </div>
                 </div>
 
@@ -138,53 +138,34 @@
                         <div id="clipboard-message">Link Copied!</div>
                     </div>
                 </div>
-                <!-- pre, next post
-                        
-                <div class="row mb-2">
+                <div id="prev_next_cards" class="row mb-2">
                     <div class="col-md-6">
-                        <div
-                            class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-                            <div class="col p-4 d-flex flex-column position-static">
-                                <strong class="d-inline-block mb-2 text-primary">{Category}Programming/Web</strong>
-                                <h3 class="mb-0">이전 글 제목</h3>
-                                <p class="card-text mb-auto">글에 대한 간단한 설명</p>
-                                <div class="mb-1 text-muted">by huch0 - 2023.01.30</div>
-                            </div>
-                            <div class="col-auto d-none d-lg-block">
-                                <svg class="bd-placeholder-img" width="200" height="250"
-                                    xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
-                                    preserveAspectRatio="xMidYMid slice" focusable="false">
-                                    <title>Placeholder</title>
-                                    <rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%"
-                                        fill="#eceeef" dy=".3em">Thumbnail</text>
-                                </svg>
-
-                            </div>
+                        <div 
+                            class="pn_card row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                            <a href="/post/{{prev_id}}">
+                                <div class="col p-4 d-flex flex-column position-static">
+                                    <strong class="d-inline-block mb-2 text-info">Programming/Web</strong>
+                                    <div class="pn_title mb-0">{{prev_title}}</div>
+                                    <div class="pn_description card-text mb-auto">{{prev_description}}</div>
+                                    <div class="mb-1 text-muted">by {{prev_author}} - {{prev_date}}</div>
+                                </div>
+                            </a>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div
-                            class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                        <div 
+                            class="pn_card row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
                             <div class="col p-4 d-flex flex-column position-static">
-                                <strong class="d-inline-block mb-2 text-primary">{Category}Programming/Web</strong>
-                                <h3 class="mb-0">다음 글 제목</h3>
-                                <p class="card-text mb-auto">글에 대한 간단한 설명</p>
-                                <div class="mb-1 text-muted">by huch0 - 2023.02.01</div>
+                                <strong class="d-inline-block mb-2 text-info">Programming/Web</strong>
+                                <div class="pn_title mb-0">{{next_title}}</div>
+                                <div class="pn_descripton card-text mb-auto">{{next_description}}</div>
+                                <div class="mb-1 text-muted">by {{next_author}} - {{next_date}}</div>
                             </div>
-                            <div class="col-auto d-none d-lg-block">
-                                <svg class="bd-placeholder-img" width="200" height="250"
-                                    xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
-                                    preserveAspectRatio="xMidYMid slice" focusable="false">
-                                    <title>Placeholder</title>
-                                    <rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%"
-                                        fill="#eceeef" dy=".3em">Thumbnail</text>
-                                </svg>
-
-                            </div>
+                            
                         </div>
                     </div>
                 </div>
-                -->
+                
     </main>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

@@ -92,17 +92,6 @@ router.get('/home/:category', async (req, res) => {
     res.render('category_home', { category, res_posts, post_count, subcategory, page });
 });
 
-router.get('/english_home', (req, res) => {
-    res.render('category_home', { category: 'English' });
-});
-router.get('/math_home', (req, res) => {
-    res.render('category_home', { category: 'Math' });
-});
-router.get('/toilet_home', (req, res) => {
-    res.render('category_home', { category: 'Toilet' });
-});
-
-
 router.get('/editor/:type', isLoggedIn, (req, res) => {
 
     const type = req.params.type;
@@ -114,33 +103,48 @@ router.get('/editor/:type', isLoggedIn, (req, res) => {
     //res.render('editor', { title: '작성' });
 });
 
-router.get('/post/:id', (req, res) => {
-    post_id = req.params.id;
-    console.log('GET /post/:id ROUTER STARTED', post_id);
+router.get('/post/:id', async (req, res) => {
+  const post_id = req.params.id;
+  console.log('GET /post/:id ROUTER STARTED', post_id);
 
-
+  try {
     // Find the post in the database using the "id" value
-    Post.findOne({ where: { id: post_id } })
-        .then((post) => {
-            console.log('/post/' + post_id);
+    const post = await Post.findOne({ where: { id: post_id } });
+    console.log('/post/' + post_id);
 
+    // Find the previous post
+    const previousPost = await Post.findOne({ where: { id: { [Op.lt]: post_id } }, order: [['id', 'DESC']] });
 
-            User.findOne({ where: { id: post.UserId } })
-                .then((user) => {
-                    res.render('post', { id: post.id, author_id: post.UserId, author: user.nick, date: format_date(post.createdAt), title: post.title, description: post.description, thumbnail_url: post.thumbnail_url, post_path: './posts/' + post_id + '.html' });
-                })
-                .catch((error) => {
-                    console.error(error);
+    // Find the next post
+    const nextPost = await Post.findOne({ where: { id: { [Op.gt]: post_id } }, order: [['id', 'ASC']] });
 
-                });
+    const user = await User.findOne({ where: { id: post.UserId } });
 
-
-        })
-        .catch((error) => {
-            console.error(error);
-        });
-    // If the post is found, define the post path
+    res.render('post', { 
+      id: post.id, 
+      author_id: post.UserId, 
+      author: user.nick, 
+      date: format_date(post.createdAt), 
+      title: post.title, 
+      description: post.description, 
+      thumbnail_url: post.thumbnail_url, 
+      post_path: './posts/' + post_id + '.html',
+      prev_id: previousPost ? previousPost.id : null,
+      prev_title: previousPost ? previousPost.title : null,
+      prev_description: previousPost ? previousPost.description : null,
+      prev_author: previousPost ? previousPost.UserId : null,
+      prev_date: previousPost ? format_date(previousPost.createdAt) : null,
+      next_id: nextPost ? nextPost.id : null,
+      next_title: nextPost ? nextPost.title : null,
+      next_description: nextPost ? nextPost.description : null,
+      next_author: nextPost ? nextPost.UserId : null,
+      next_date: nextPost ? format_date(nextPost.createdAt) : null,
+    });
+  } catch (error) {
+    console.error(error);
+  }
 });
+
 
 
 
