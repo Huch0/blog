@@ -16,7 +16,12 @@ body {
     justify-content: center;
     max-width: 1500px;
 }
-
+.sticky {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+}
 .directory_path:hover {
     text-decoration: underline;
 }
@@ -142,6 +147,7 @@ body {
 
 #author_profile {
     margin-top: 300px;
+    margin-bottom: 100px;
 }
 #user_nick a{
     text-decoration: none;
@@ -165,6 +171,9 @@ body {
 }
 .pn_card a {
     text-decoration: none;
+}
+.pn_card div {
+    color: black;
 }
 .pn_title {
     font-size: 20px;
@@ -221,17 +230,31 @@ body {
 .share-icon-wrapper:hover {
     color: black;
 }
-
-svg.bi-link-45deg {
-    fill: #c8c1c1;
-    width: 24px;
-    height: 24px;
+#share-icon a{
+    color: #c8c1c1;
+}
+#share-icon a:hover {
+    color: #787873;
+}
+.arrow-icon-wrapper {
+    width: 36px;
+    height: 36px;
+    border-radius: 30%;
+    border: 1px solid #c8c1c1;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
 }
 
-svg.bi-link-45deg:hover {
-    color: black;
+#arrow-icon a{
+    color: #c8c1c1;
+    text-decoration: none;
 }
-
+#arrow-icon a:hover {
+    color: #787873;
+}
 #clipboard-message {
     color: #72CC82;
     margin-top: 10px;

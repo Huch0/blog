@@ -88,7 +88,6 @@ window.onload = () => {
         index_group.appendChild(indexItem);
     });
 
-
     window.addEventListener('scroll', updateIndexGroup);
     window.addEventListener('resize', updateIndexGroup);
 

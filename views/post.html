@@ -15,15 +15,13 @@
     <link rel="stylesheet" href="/prism.css">
     <link rel="stylesheet" href="/sidebar.css">
     <!-- Font Awesome Icon-->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
-        integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
 
 </head>
 
 <body>
-    <header class="p-3">
+    <header class="p-3" id="myHeader">
         <div class="d-flex flex-wrap align-items-left">
-            <nav class="navbar">
+            <nav class="navbar p-0">
                 <div class="container-fluid">
                     <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
                         data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar">
@@ -119,22 +117,25 @@
                     <div id="index_group" class="p-3">
                     </div>
 
-                    <div class="p-4">
-                        <!-- Share Icon-->
-                        <div class="share-icon-wrapper">
-                            <div id="share-icon">
+                    <div class="p-4 d-flex">
+                        <div class="arrow-icon-wrapper">
+                            <div id="arrow-icon">
                                 <a href="#">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                        class="bi bi-link-45deg" viewBox="0 0 16 16">
-                                        <path
-                                            d="M4.715 6.542 3.343 7.914a3 3 0 1 0 4.243 4.243l1.828-1.829A3 3 0 0 0 8.586 5.5L8 6.086a1.002 1.002 0 0 0-.154.199 2 2 0 0 1 .861 3.337L6.88 11.45a2 2 0 1 1-2.83-2.83l.793-.792a4.018 4.018 0 0 1-.128-1.287z" />
-                                        <path
-                                            d="M6.586 4.672A3 3 0 0 0 7.414 9.5l.775-.776a2 2 0 0 1-.896-3.346L9.12 3.55a2 2 0 1 1 2.83 2.83l-.793.792c.112.42.155.855.128 1.287l1.372-1.372a3 3 0 1 0-4.243-4.243L6.586 4.672z" />
-                                    </svg>
+                                    <i class="fa-solid fa-arrow-up"></i>
+                                </a>
+                                <a href="#author_profile">
+                                    <i class="fa-solid fa-arrow-down"></i>
                                 </a>
                             </div>
                         </div>
-
+                        <!-- Share Icon-->
+                        <div class="share-icon-wrapper">
+                            <div id="share-icon">
+                                <a href="javascript:void(0)">
+                                    <i class="fa-lg fa-solid fa-link"></i>
+                                </a>
+                            </div>
+                        </div>
                         <div id="clipboard-message">Link Copied!</div>
                     </div>
                 </div>
@@ -144,6 +145,7 @@
                             class="pn_card row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
                             <a href="/post/{{prev_id}}">
                                 <div class="col p-4 d-flex flex-column position-static">
+                                    <div><i class="fa-solid fa-chevron-left"></i>이전글</div>
                                     <strong class="d-inline-block mb-2 text-info">Programming/Web</strong>
                                     <div class="pn_title mb-0">{{prev_title}}</div>
                                     <div class="pn_description card-text mb-auto">{{prev_description}}</div>
@@ -155,18 +157,21 @@
                     <div class="col-md-6">
                         <div 
                             class="pn_card row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-                            <div class="col p-4 d-flex flex-column position-static">
-                                <strong class="d-inline-block mb-2 text-info">Programming/Web</strong>
-                                <div class="pn_title mb-0">{{next_title}}</div>
-                                <div class="pn_descripton card-text mb-auto">{{next_description}}</div>
-                                <div class="mb-1 text-muted">by {{next_author}} - {{next_date}}</div>
-                            </div>
-                            
+                            <a href="/post/{{next_id}}">
+                                <div  style="text-align: right;"class="col p-4 d-flex flex-column position-static">
+                                    <div>다음글<i class="fa-solid fa-chevron-right"></i></div>
+                                    <strong class="d-inline-block mb-2 text-info">Programming/Web</strong>
+                                    <div class="pn_title mb-0">{{next_title}}</div>
+                                    <div class="pn_description card-text mb-auto">{{next_description}}</div>
+                                    <div class="mb-1 text-muted">by {{next_author}} - {{next_date}}</div>
+                                </div>
+                            </a>
                         </div>
                     </div>
                 </div>
                 
     </main>
+    <script src="https://kit.fontawesome.com/f81150c00b.js" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="../scripts/prism.js"></script>
