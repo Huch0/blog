@@ -5,49 +5,21 @@ window.onload = () => {
         alert(new URL(location.href).searchParams.get('loginError'));
     }
 
-    const expiration = Date.now() + (5 * 60 * 1000); // 5 minutes from now
+    const url = new URL(window.location.href);
+    const params = new URLSearchParams(url.search);
 
-    tables = JSON.parse(localStorage.getItem('tables'));
-    const tables_expiration = localStorage.getItem('tables_expiration');
+    if (params.has('search_type'))
+        changeValue(params.get('search_type'));
+    if (params.has('search_term'))
+        document.querySelector('#search_input').value = params.get('search_term');
 
-    if (tables && tables_expiration && Date.now() < tables_expiration) {
-        console.log('tables : localStorage에서 가져옴.', tables);
-    } else {
+    make_tables();
 
-        get_category_user().then(tables => {
-            console.log('tables: 서버에서 가져옴.', tables);
-            localStorage.setItem('tables', JSON.stringify(tables));
-            localStorage.setItem('tables_expiration', expiration);
-        });
-    }
+    make_posts_cards();
 
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const current_page = parseInt(urlParams.get('page')) || 1;
-    const current_subcategory = urlParams.get('subcategory');
+    const current_page = parseInt(params.get('page')) || 1;
+    const current_subcategory = params.get('subcategory');
     const current_category = document.querySelector('title').innerText;
-
-    const search_result = document.getElementById("search_result");
-
-    const res_posts = JSON.parse(document.querySelector('#res_posts').innerText);
-    console.log('res_posts : ', res_posts);
-
-    let cardsHtml = "";
-
-    for (let i = 0; i < res_posts.length; i++) {
-        const post = res_posts[i];
-        console.log('post', post);
-        cardsHtml += createDiv(post.path, post.thumbnail_url, post.Category2Id, post.title, post.description, post.UserId, format_date(post.createdAt), "2400");
-    }
-    if (!cardsHtml) {
-        search_result.innerHTML = 
-        `<div class="alert alert-warning" role="alert" style="margin-top:200px;margin-bottom:200px">
-          검색 결과가 없습니다 
-        </div>`;
-    } else {
-        search_result.innerHTML = cardsHtml;
-    }
-
     const listContainer = document.querySelector('#list_container');
     const category_btn_group = document.querySelector('#category_btn_group');
 
@@ -78,7 +50,7 @@ window.onload = () => {
             subcategoryLink.textContent = subcategory;
             subcategoryItem.appendChild(subcategoryLink);
             subcategoriesList.appendChild(subcategoryItem);
-            
+
             if (category.name === current_category)
                 category_btn_group.appendChild(generate_category_btns(subcategory, current_subcategory));
         });
@@ -97,51 +69,56 @@ window.onload = () => {
     });
 
     const totalPosts = document.querySelector('#post_count').innerHTML;
+    generate_pagination(totalPosts, current_page, current_subcategory);
 
-    const paginationHtml = generatePagination(totalPosts, current_page, current_subcategory);
+    const search_form = document.querySelector('#search_form');
+    search_form.addEventListener('submit', (event) => {
+        event.preventDefault();
 
-    document.querySelector('#pagination_container').innerHTML = paginationHtml;
+        console.log('Client LOG / search_form submitted');
+        // Get the current URL and create a URLSearchParams object from it
+
+        const search_type = document.querySelector('#search_dropdown').innerHTML;
+        const search_term = document.querySelector('#search_input').value;
+
+        // Set the query parameter based on the search term
+        params.set('search_type', search_type);
+        params.set('search_term', search_term);
+
+        // Update the URL with the new query parameters
+        url.search = params.toString();
+        const newUrl = url.toString();
+
+        // Redirect the browser to the new URL
+        window.location.href = newUrl;
+    });
 };
 
-const search_form = document.querySelector('#search_form');
-let search_type = '';
-let search_term = '';
-
-const url = new URL(window.location.href);
-const params = new URLSearchParams(url.search);
-
-if (params.has('search_type')) 
-    changeValue(params.get('search_type'));
-if (params.has('search_term'))
-    document.querySelector('#search_input').value = params.get('search_term');
 
 
-search_form.addEventListener('submit', (event) => {
-    event.preventDefault();
+const make_posts_cards = () => {
+    const search_result = document.getElementById("search_result");
+    const res_posts = JSON.parse(document.querySelector('#res_posts').innerText);
+    console.log('res_posts : ', res_posts);
 
-    console.log('Client LOG / search_form submitted');
-    // Get the current URL and create a URLSearchParams object from it
-    const url = new URL(window.location.href);
-    const params = new URLSearchParams(url.search);
+    let cardsHtml = "";
 
+    for (let i = 0; i < res_posts.length; i++) {
+        const post = res_posts[i];
+        console.log('post', post);
+        cardsHtml += createDiv(post.path, post.thumbnail_url, post.Category2Id, post.title, post.description, post.UserId, format_date(post.createdAt), "2400");
+    }
+    if (!cardsHtml) {
+        search_result.innerHTML =
+            `<div class="alert alert-warning" role="alert" style="margin-top:200px;margin-bottom:200px">
+          검색 결과가 없습니다 :(
+        </div>`;
+    } else {
+        search_result.innerHTML = cardsHtml;
+    }
+};
 
-    search_type = document.querySelector('#search_dropdown').innerHTML;
-    search_term = document.querySelector('#search_input').value;
-
-
-    // Set the query parameter based on the search term
-    params.set('search_type', search_type);
-    params.set('search_term', search_term);
-
-    // Update the URL with the new query parameters
-    url.search = params.toString();
-    const newUrl = url.toString();
-
-    // Redirect the browser to the new URL
-    window.location.href = newUrl;
-});
-
-function generatePagination(totalPosts, currentPage, current_subcategory) {
+function generate_pagination(totalPosts, currentPage, current_subcategory) {
     console.log('pagination func activated, totposts, currentapgae : ', totalPosts, currentPage);
     const postsPerPage = 8;
     const totalPages = Math.ceil(totalPosts / postsPerPage);
@@ -196,6 +173,8 @@ function generatePagination(totalPosts, currentPage, current_subcategory) {
     }
     html += '</ul></nav>';
 
+
+    document.querySelector('#pagination_container').innerHTML = html;
     return html;
 }
 

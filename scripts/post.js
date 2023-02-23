@@ -11,66 +11,19 @@ const shareIcon = document.querySelector('#share-icon');
 
 window.onload = () => {
 
-    const expiration = Date.now() + (5 * 60 * 1000); // 5 minutes from now
+    make_tables();
 
-    tables = JSON.parse(localStorage.getItem('tables'));
-    const tables_expiration = localStorage.getItem('tables_expiration');
+    generate_category_list();
 
-    if (tables && tables_expiration && Date.now() < tables_expiration) {
-        console.log('tables : localStorage에서 가져옴.', tables);
-    } else {
+    make_index_group();
 
-        get_category_user().then(tables => {
-            console.log('tables: 서버에서 가져옴.', tables);
-            localStorage.setItem('tables', JSON.stringify(tables));
-            localStorage.setItem('tables_expiration', expiration);
-        });
-    }
-    const listContainer = document.querySelector('#list_container');
+    window.addEventListener('scroll', update_index_group);
+    window.addEventListener('resize', update_index_group);
 
-    Object.values(tables.category_table).forEach(category => {
-        // create the button element for the category
-        const categoryButton = document.createElement('button');
-        categoryButton.classList.add('btn', 'btn-toggle', 'd-inline-flex', 'align-items-center', 'rounded', 'border-0', 'collapsed');
-        categoryButton.setAttribute('data-bs-toggle', 'collapse');
-        categoryButton.setAttribute('data-bs-target', `#${category.name}-collapse`);
-        categoryButton.setAttribute('aria-expanded', 'false');
-        categoryButton.textContent = category.name;
+    shareIcon.addEventListener('click', copy_link);
+};
 
-        // create the collapse element for the subcategories
-        const subcategoriesCollapse = document.createElement('div');
-        subcategoriesCollapse.classList.add('collapse');
-        subcategoriesCollapse.setAttribute('id', `${category.name}-collapse`);
-
-        // create the list element for the subcategories
-        const subcategoriesList = document.createElement('ul');
-        subcategoriesList.classList.add('btn-toggle-nav', 'list-unstyled', 'fw-normal', 'pb-1', 'small');
-
-        // loop through the subcategories and generate the list items
-        Object.values(category.category2_table).forEach(subcategory => {
-            const subcategoryItem = document.createElement('li');
-            const subcategoryLink = document.createElement('a');
-            subcategoryLink.classList.add('link-dark', 'd-inline-flex', 'text-decoration-none', 'rounded');
-            subcategoryLink.setAttribute('href', '#');
-            subcategoryLink.textContent = subcategory;
-            subcategoryItem.appendChild(subcategoryLink);
-            subcategoriesList.appendChild(subcategoryItem);
-        });
-
-        // add the subcategories list to the collapse element
-        subcategoriesCollapse.appendChild(subcategoriesList);
-
-        // create the list item element for the category and add the button and collapse elements
-        const categoryItem = document.createElement('li');
-        categoryItem.classList.add('mb-1');
-        categoryItem.appendChild(categoryButton);
-        categoryItem.appendChild(subcategoriesCollapse);
-
-        // add the category list item to the list container
-        listContainer.appendChild(categoryItem);
-    });
-
-
+const make_index_group = () => {
     headings.forEach((heading) => {
         const headingId = heading.textContent;
         const headingLevel = heading.nodeName.slice(1);
@@ -87,14 +40,8 @@ window.onload = () => {
         indexItem.appendChild(indexLink);
         index_group.appendChild(indexItem);
     });
-
-    window.addEventListener('scroll', updateIndexGroup);
-    window.addEventListener('resize', updateIndexGroup);
-
-    shareIcon.addEventListener('click', copyLink);
 };
-
-function updateIndexGroup() {
+function update_index_group() {
     // Get the current scroll position
     const scrollTop = window.scrollY || window.pageYOffset;
 
@@ -124,7 +71,7 @@ function updateIndexGroup() {
     });
 }
 
-function copyLink() {
+function copy_link() {
     // copy the link to clipboard
     const url = window.location.href;
     navigator.clipboard.writeText(url).then(function () {

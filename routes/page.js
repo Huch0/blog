@@ -146,23 +146,36 @@ router.get('/post/:id', async (req, res) => {
 });
 
 
-
+const texts = [
+    "huch0 님의 최근 게시물",
+    "서강준 님의 최근 게시물",
+    "kyleidea 님의 최근 게시물",
+    "뭔근근우여 님의 최근 게시물",
+    "Code 카테고리의 최근 게시물",
+    "Math 카테고리의 최근 게시물",
+    "English 카테고리의 최근 게시물",
+    "Essay 카테고리의 최근 게시물"
+  ];
 
 router.get('/', async (req, res, next) => {
     console.log('\nhome Router Activated');
     try {
-        /*
+        const random_index = Date.now() % 8;
+        const random_text = texts[random_index];
+        console.log(random_index, random_text);
+
         const posts = await Post.findAll({
-            include: {
-                model: User,
-                attributes: ['id', 'nick'],
-            },
+            //where,
+            limit: 4,
             order: [['createdAt', 'DESC']],
+            include: [{ model: User }],
         });
-        */
+        const res_posts = JSON.stringify(posts);
+
         res.render('home', {
-            title: 'LiFE',
-            //posts: posts,
+            title: 'home',
+            random_text,
+            res_posts
         });
     } catch (error) {
         console.error(error);
@@ -170,3 +183,6 @@ router.get('/', async (req, res, next) => {
 });
 
 module.exports = router;
+
+
+

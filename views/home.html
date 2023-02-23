@@ -20,6 +20,7 @@
 </head>
 
 <body>
+  <div id="res_posts" class="d-none">{{res_posts}}</div>
   <div id="home_screen" class="container-fluid">
     <nav class="navbar fixed-top">
       <div class="container-fluid">
@@ -62,7 +63,7 @@
     </div>
     
     <div class="m-0">
-      <p>최신글 4개</p>
+      <p>{{random_text}}</p>
       <div id="search_result" class="d-flex flex-wrap">
 
       </div>
@@ -72,6 +73,7 @@
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script type="text/javascript" src="../scripts/home.js"></script>
   <script type="text/javascript" src="../scripts/get_category_user.js"></script>
+  <script type="text/javascript" src="../scripts/generate_category_list.js"></script>
   <script type="text/javascript" src="../scripts/get_posts.js"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
