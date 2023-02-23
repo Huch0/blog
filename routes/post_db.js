@@ -220,7 +220,7 @@ router.put('/update/:postId', async (req, res, next) => {
       title: title,
       description: description,
       thumbnail_url: thumbnail_url,
-      category2_id: category2_id,
+      Category2Id: category2_id,
     }, {
       where: {
         id: postId
