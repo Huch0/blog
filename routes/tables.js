@@ -5,16 +5,16 @@ const { Op } = require("sequelize");
 
 const User = require('../models/user');
 const Post = require('../models/post');
-const Category_1 = require('../models/category_1');
-const Category_2 = require('../models/category_2');
+const Maincategory = require('../models/main_category');
+const Subcategory = require('../models/sub_category');
 
 
 router.get('/database', async (req, res) => {
   try {
     const users = await User.findAll();
     const posts = await Post.findAll();
-    const categories_1 = await Category_1.findAll();
-    const categories_2 = await Category_2.findAll();
+    const main_categories = await Maincategory.findAll();
+    const sub_categories = await Subcategory.findAll();
     const deleted_posts = await Post.findAll({
       where: {
         deletedAt: {
@@ -30,7 +30,7 @@ router.get('/database', async (req, res) => {
     //console.log(category);
     
 
-    res.render('tables', { users, posts, categories_1, categories_2, deleted_posts, test });
+    res.render('tables', { users, posts, main_categories, sub_categories, deleted_posts, test });
   } catch (error) {
     console.error(error);
     res.status(500).send('Server error');

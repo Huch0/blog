@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 
-module.exports = class Category_2 extends Sequelize.Model {
+module.exports = class Maincategory extends Sequelize.Model {
     static init(sequelize) {
         return super.init({
             name: {
@@ -11,8 +11,8 @@ module.exports = class Category_2 extends Sequelize.Model {
         }, {
             sequelize,
             timestamps: false,
-            modelName: 'Category_2',
-            tableName: 'category_2',
+            modelName: 'Maincategory',
+            tableName: 'main_category',
             paranoid: false,
             charset: 'utf8',
             collate: 'utf8_general_ci',
@@ -20,7 +20,7 @@ module.exports = class Category_2 extends Sequelize.Model {
     }
 
     static associate(db) {
-        db.Category_2.belongsTo(db.Category_1);
-        db.Category_2.hasMany(db.Post, { onDelete: 'SET NULL' });
+        db.Maincategory.hasMany(db.Subcategory, { onDelete: 'SET NULL' });
+        db.Maincategory.hasMany(db.Post, { onDelete: 'SET NULL' });
     }
 };

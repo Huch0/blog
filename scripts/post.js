@@ -17,6 +17,11 @@ window.onload = () => {
 
     make_index_group();
 
+    const prev_post = JSON.parse(document.querySelector('#prev_post').innerHTML);
+    const next_post = JSON.parse(document.querySelector('#next_post').innerHTML);
+    create_prev_next_cards(prev_post, next_post);
+
+
     window.addEventListener('scroll', update_index_group);
     window.addEventListener('resize', update_index_group);
 
@@ -25,7 +30,11 @@ window.onload = () => {
 
 const make_index_group = () => {
     headings.forEach((heading) => {
-        const headingId = heading.textContent;
+        let headingId = heading.id;
+        if (!headingId) {
+            headingId = heading.textContent.trim().replace(/\s+/g, '-');
+            heading.id = headingId;
+        }
         const headingLevel = heading.nodeName.slice(1);
         const marginLeft = (headingLevel - 1) * 5;
 
@@ -34,8 +43,8 @@ const make_index_group = () => {
 
         const indexLink = document.createElement('a');
         indexLink.className = 'index_link'
-        indexLink.textContent = headingId;
-        indexLink.href = `#${headingId.split(' ').join('-')}`;
+        indexLink.textContent = heading.textContent;
+        indexLink.href = `#${headingId}`;
 
         indexItem.appendChild(indexLink);
         index_group.appendChild(indexItem);
@@ -85,4 +94,66 @@ function showMessage() {
     setTimeout(function () {
         clipboardMessage.style.display = 'none';
     }, 3000); // hide after 3 seconds
+}
+
+const create_prev_next_cards = (prev_post, next_post) => {
+    let prev_card = '';
+    let next_card = '';
+
+    if (prev_post) {
+        const prev_main_category = tables.category_table[prev_post.MaincategoryId].name;
+        const prev_sub_category = findSubCategoryNameById(tables.category_table, prev_post.SubcategoryId);
+        const prev_category = prev_main_category + ' / ' + prev_sub_category;
+        const prev_author = tables.user_table[prev_post.UserId];
+        const prev_date = format_date(prev_post.createdAt);
+
+        prev_card = `
+        <div class="col-md-6">
+          <div class="pn_card row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+            <a href="/post/${prev_post.id}">
+              <div class="col p-4 d-flex flex-column position-static">
+                <div><i class="fa-solid fa-chevron-left"></i>이전글</div>
+                <strong class="d-inline-block mb-2 text-info">${prev_category}</strong>
+                <div class="pn_title mb-0">${prev_post.title}</div>
+                <div class="pn_description card-text mb-auto">${prev_post.description}</div>
+                <div class="mb-1 text-muted">by ${prev_author} - ${prev_date}</div>
+              </div>
+            </a>
+          </div>
+        </div>
+      `;
+    }
+
+    if (next_post) {
+        const next_main_category = tables.category_table[next_post.MaincategoryId].name;
+        const next_sub_category = findSubCategoryNameById(tables.category_table, next_post.SubcategoryId);
+        const next_category = next_main_category + ' / ' + next_sub_category;
+        const next_author = tables.user_table[next_post.UserId];
+        const next_date = format_date(next_post.createdAt);
+        
+        next_card = `
+        <div class="col-md-6">
+          <div class="pn_card row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+            <a href="/post/${next_post.id}">
+              <div style="text-align: right;" class="col p-4 d-flex flex-column position-static">
+                <div>다음글<i class="fa-solid fa-chevron-right"></i></div>
+                <strong class="d-inline-block mb-2 text-info">${next_category}</strong>
+                <div class="pn_title mb-0">${next_post.title}</div>
+                <div class="pn_description card-text mb-auto">${next_post.description}</div>
+                <div class="mb-1 text-muted">by ${next_author} - ${next_date}</div>
+              </div>
+            </a>
+          </div>
+        </div>
+      `;
+    }
+    const container = document.querySelector("#prev_next_cards");
+    container.innerHTML = `${prev_card}${next_card}`;
+    return;
+};
+
+function format_date(date_str) {
+    let date = new Date(date_str);
+    let formattedDate = date.getFullYear() + "." + (date.getMonth() + 1).toString().padStart(2, "0") + "." + date.getDate().toString().padStart(2, "0");
+    return formattedDate;
 }

@@ -6,7 +6,7 @@ const { Op } = require('sequelize');
 const url = require('url');
 const querystring = require('querystring');
 
-const { Post, User, Category_1, Category_2 } = require("../models");
+const { Post, User, Maincategory, Subcategory } = require("../models");
 const { isLoggedIn } = require('./is_logged_in');
 const { hash } = require('bcrypt');
 const { post } = require('./page');
@@ -23,7 +23,8 @@ router.post('/', isLoggedIn, upload2.none(), async (req, res, next) => {
     const title = req.body.title.replace(/<[^>]*>/g, '');
     const description = req.body.description;
     const thumbnail_url = req.body.thumbnail_url;
-    const category2_id = req.body.category2_id;
+    const main_category_id = req.body.main_category_id;
+    const sub_category_id = req.body.sub_category_id;
     const content = req.body.content;
 
     // Get the latest post from the database
@@ -35,29 +36,27 @@ router.post('/', isLoggedIn, upload2.none(), async (req, res, next) => {
     const filePath = path.join(__dirname, '../views/posts', fileName);
     const relativeFilePath = './post/' + post_id;
 
-    console.log('title: ', title, description, thumbnail_url, category2_id, fileName, filePath, content);
+    console.log('title: ', title, description, thumbnail_url, main_category_id, sub_category_id, fileName, filePath, content);
 
     fs.writeFile(filePath, content, (err) => {
       if (err) throw err;
       console.log('HTML file was saved!');
     });
-
-    try {
-      const post = await Post.create({
-        title: title,
-        description: description,
-        thumbnail_url: thumbnail_url,
-        path: relativeFilePath,
-        Category2Id: category2_id,
-        UserId: req.user.id
-      });
-
+    Post.create({
+      title: title,
+      description: description,
+      thumbnail_url: thumbnail_url,
+      path: relativeFilePath,
+      MaincategoryId: main_category_id,
+      SubcategoryId: sub_category_id,
+      UserId: req.user.id
+    })
+    .then((post) => {
       res.redirect('/');
-    } catch (error) {
-      // handle the error
+    })
+    .catch((error) => {
       console.error(error);
-      res.redirect('/');
-    }
+    });
   } catch (error) {
     console.error(error);
     next(error);
@@ -103,7 +102,7 @@ router.get('/edit/:id', async (req, res, next) => {
       res.status(500).json({ message: 'Error retrieving post' });
     });
 });
-
+/*
 router.get('/search', async (req, res, next) => {
   const request_url = url.parse(req.url);
   const query = querystring.parse(request_url.query);
@@ -198,7 +197,7 @@ router.get('/search', async (req, res, next) => {
     });
   }
 });
-
+*/
 
 
 //Update
@@ -207,12 +206,13 @@ router.put('/update/:postId', async (req, res, next) => {
   const title = req.body.title.replace(/<[^>]*>/g, '');
   const description = req.body.description;
   const thumbnail_url = req.body.thumbnail_url;
-  const category2_id = req.body.category2_id;
+  const main_category_id = req.body.main_category_id;
+  const sub_category_id = req.body.sub_category_id;
   const content = req.body.content;
 
   const fileName = postId + ".html";
   const filePath = path.join(__dirname, '../views/posts', fileName);
-  console.log(postId, title, description, thumbnail_url, category2_id, content, fileName, filePath);
+  console.log(postId, title, description, thumbnail_url, main_category_id, sub_category_id, content, fileName, filePath);
 
   try {
     // 1. Update the values in the database
@@ -220,7 +220,8 @@ router.put('/update/:postId', async (req, res, next) => {
       title: title,
       description: description,
       thumbnail_url: thumbnail_url,
-      Category2Id: category2_id,
+      MaincategoryId: main_category_id,
+      SubcategoryId: sub_category_id,
     }, {
       where: {
         id: postId

@@ -23,7 +23,7 @@ const make_posts_cards = () => {
   for (let i = 0; i < res_posts.length; i++) {
       const post = res_posts[i];
       console.log('post', post);
-      cardsHtml += createDiv(post.path, post.thumbnail_url, post.Category2Id, post.title, post.description, post.UserId, format_date(post.createdAt), "2400");
+      cardsHtml += createDiv(post);
   }
   if (!cardsHtml) {
       search_result.innerHTML =

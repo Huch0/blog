@@ -42,7 +42,7 @@ window.onload = () => {
         subcategoriesList.classList.add('btn-toggle-nav', 'list-unstyled', 'fw-normal', 'pb-1', 'small');
 
         // loop through the subcategories and generate the list items
-        Object.values(category.category2_table).forEach(subcategory => {
+        Object.values(category.sub_category_table).forEach(subcategory => {
             const subcategoryItem = document.createElement('li');
             const subcategoryLink = document.createElement('a');
             subcategoryLink.classList.add('link-dark', 'd-inline-flex', 'text-decoration-none', 'rounded');
@@ -51,6 +51,7 @@ window.onload = () => {
             subcategoryItem.appendChild(subcategoryLink);
             subcategoriesList.appendChild(subcategoryItem);
 
+            //console.log('func',category.name, current_category);
             if (category.name === current_category)
                 category_btn_group.appendChild(generate_category_btns(subcategory, current_subcategory));
         });
@@ -106,7 +107,7 @@ const make_posts_cards = () => {
     for (let i = 0; i < res_posts.length; i++) {
         const post = res_posts[i];
         console.log('post', post);
-        cardsHtml += createDiv(post.path, post.thumbnail_url, post.Category2Id, post.title, post.description, post.UserId, format_date(post.createdAt), "2400");
+        cardsHtml += createDiv(post);
     }
     if (!cardsHtml) {
         search_result.innerHTML =
@@ -185,6 +186,7 @@ function format_date(date_str) {
 }
 
 const generate_category_btns = (subcategory, current_subcategory) => {
+    //console.log('func', current_subcategory, subcategory);
     const category_btn = document.createElement('a');
     category_btn.classList.add('btn', 'btn-outline-info', 'm-1');
     if (current_subcategory === subcategory)

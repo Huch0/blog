@@ -4,11 +4,11 @@ module.exports = class Post extends Sequelize.Model {
     static init(sequelize) {
         return super.init({
             title: {
-                type: Sequelize.STRING(1000),
+                type: Sequelize.STRING(200),
                 allowNull: false,
             },
             description: {
-                type: Sequelize.STRING(1000),
+                type: Sequelize.STRING(200),
                 allowNull: false,
             },
             thumbnail_url: {
@@ -33,6 +33,7 @@ module.exports = class Post extends Sequelize.Model {
 
     static associate(db) {
         db.Post.belongsTo(db.User);
-        db.Post.belongsTo(db.Category_2);
+        db.Post.belongsTo(db.Subcategory);
+        db.Post.belongsTo(db.Maincategory);
     }
 };

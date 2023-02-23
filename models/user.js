@@ -8,8 +8,8 @@ module.exports = class User extends Sequelize.Model {
                 allowNull: false,
                 unique: true,
             },
-            nick: {
-                type: Sequelize.STRING(15),
+            name: {
+                type: Sequelize.STRING(24),
                 allowNull: false,
                 unique: true,
             },
@@ -17,7 +17,14 @@ module.exports = class User extends Sequelize.Model {
                 type: Sequelize.STRING(100),
                 allowNull: false,
             },
-
+            profile_url: {
+                type: Sequelize.STRING(200),
+                allowNull: false,
+            },
+            introduction: {
+                type: Sequelize.STRING(200),
+                allowNull: false,
+            },
         }, {
             sequelize,
             underscored: false,

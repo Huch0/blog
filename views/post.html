@@ -50,7 +50,7 @@
             </nav>
             <div>
                 <h1 id="blog_name" class="section m-0"><a class="directory_path navbar-brand" href="/">CAN_U</a>
-                    / <a class="directory_path navbar-brand" href="/home/Code">Code</a> / <a
+                    / <a class="directory_path navbar-brand" href="/home/{{main_category}}">{{main_category}}</a> / <a
                         class="directory_path navbar-brand" href="#">{{author}}</h1></a>
             </div>
         </div>
@@ -89,19 +89,13 @@
 
                 <div id="author_profile" class="container row p-3 border-top border-bottom">
                     <div class="col-lg-3">
-                        <svg class="bd-placeholder-img rounded-circle" width="140" height="140"
-                            xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140"
-                            preserveAspectRatio="xMidYMid slice" focusable="false">
-                            <title>Placeholder</title>
-                            <rect width="100%" height="100%" fill="#777"></rect><text x="50%" y="50%" fill="#777"
-                                dy=".3em">140x140</text>
-                        </svg>
+                        <img class="bd-placeholder-img rounded-circle" style="width: 140px!important;height:140px;" src="../img/profile/basic_profile.png" alt="Your image description">
                     </div>
                     <div class="col-md-auto d-flex flex-column justify-content-center">
                             <div id="user_nick" class="fw-normal fs-2">
                                 <a href="#">{{author}}</a>
                             </div>
-                        <div id="user_description" class="fw-normal">착한사람.</div>
+                        <div id="user_description" class="fw-normal">{{author_introduction}}</div>
                     </div>
                 </div>
 
@@ -140,6 +134,9 @@
                     </div>
                 </div>
                 <div id="prev_next_cards" class="row mb-2">
+                    <div id="prev_post" class="d-none">{{prev_post}}</div>
+                    <div id="next_post" class="d-none">{{next_post}}</div>
+                    {% if prev_id %}
                     <div class="col-md-6">
                         <div 
                             class="pn_card row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
@@ -154,6 +151,8 @@
                             </a>
                         </div>
                     </div>
+                    {% endif %}
+                    {% if next_id %}
                     <div class="col-md-6">
                         <div 
                             class="pn_card row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
@@ -168,6 +167,7 @@
                             </a>
                         </div>
                     </div>
+                    {% endif %}
                 </div>
                 
     </main>

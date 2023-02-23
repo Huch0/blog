@@ -30,13 +30,13 @@
     "postcss-loader": "^4.3.0",
     "raw-loader": "^4.0.2",
     "sequelize": "^6.25.7",
-    "sequelize-cli": "^6.5.2",
     "session-file-store": "^1.5.0",
     "style-loader": "^2.0.0",
     "webpack": "^5.75.0",
     "webpack-cli": "^4.10.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.20"
+    "nodemon": "^2.0.20",
+    "sequelize-cli": "^6.6.0"
   }
 }

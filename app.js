@@ -20,8 +20,8 @@ const passportConfig = require('./passport');
 
 const User = require('./models/user');
 const Post = require('./models/post');
-const Category_1 = require('./models/category_1');
-const Category_2 = require('./models/category_2');
+const Maincategory = require('./models/main_category');
+const Subcategory = require('./models/sub_category');
 
 const app = express();
 passportConfig();

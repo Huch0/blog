@@ -30,7 +30,7 @@ function createSubcategoryList(maincategory) {
     const subcategoriesList = document.createElement('ul');
     subcategoriesList.classList.add('btn-toggle-nav', 'list-unstyled', 'fw-normal', 'pb-1', 'small');
 
-    Object.values(maincategory.category2_table).forEach(subcategory => {
+    Object.values(maincategory.sub_category_table).forEach(subcategory => {
         const subcategoryItem = document.createElement('li');
         const subcategoryLink = document.createElement('a');
         subcategoryLink.classList.add('link-dark', 'd-inline-flex', 'text-decoration-none', 'rounded');

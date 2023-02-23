@@ -17,61 +17,61 @@
 </head>
 
 <table class="table">
-    <h1 class="text-center my-5">카테고리1</h1>
+    <h1 class="text-center my-5">메인 카테고리</h1>
     <tr>
         <th>ID</th>
         <th>name</th>
         <th>action</th>
     </tr>
-    {% for category_1 in categories_1 %}
+    {% for main_category in main_categories %}
     <tr>
-        <td>{{ category_1.id }}</td>
-        <td>{{ category_1.name }}</td>
+        <td>{{ main_category.id }}</td>
+        <td>{{ main_category.name }}</td>
         <td>
-            <button class="btn btn-danger" onclick="deleteCategory_1('{{ category_1.id | escape }}')">Delete</button>
+            <button class="btn btn-danger" onclick="deleteMaincategory('{{ main_category.id | escape }}')">Delete</button>
         </td>
     </tr>
     </tr>
     {% endfor %}
 </table>
 
-<form id="category1_form">
+<form id="main_category_form">
     <div class="mb-3">
-        <label class="form-label">카테고리_1 이름</label>
+        <label class="form-label">메인 카테고리 이름</label>
         <input class="form-control" id="name_input">
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 
 <table class="table">
-    <h1 class="text-center my-5">카테고리2</h1>
+    <h1 class="text-center my-5">서브 카테고리</h1>
     <tr>
-        <th>ID</th>
-        <th>Category_1 ID</th>
+        <th>id</th>
+        <th>MaincategoryId</th>
         <th>name</th>
         <th>action</th>
     </tr>
-    {% for category_2 in categories_2 %}
+    {% for sub_category in sub_categories %}
     <tr>
-        <td>{{ category_2.id }}</td>
-        <td>{{ category_2.Category1Id }}</td>
-        <td>{{ category_2.name }}</td>
+        <td>{{ sub_category.id }}</td>
+        <td>{{ sub_category.MaincategoryId }}</td>
+        <td>{{ sub_category.name }}</td>
         <td>
-            <button class="btn btn-danger" onclick="deleteCategory_2('{{ category_2.id | escape }}')">Delete</button>
+            <button class="btn btn-danger" onclick="deleteSubcategory('{{ sub_category.id | escape }}')">Delete</button>
         </td>
     </tr>
     </tr>
     {% endfor %}
 </table>
 
-<form id="category2_form">
+<form id="sub_category_form">
     <div class="mb-3 d-flex">
         <div class="form-group mr-3">
-            <label class="form-label">부모 카테고리_1 ID</label>
+            <label class="form-label">연결할 메인 카테고리 ID</label>
             <input class="form-control" id="parent_category_input" type="number">
         </div>
         <div class="form-group">
-            <label class="form-label">카테고리_2 이름</label>
+            <label class="form-label">서브 카테고리 이름</label>
             <input class="form-control" id="name_input">
         </div>
     </div>
@@ -81,17 +81,21 @@
 <table class="table">
     <h1 class="text-center my-5">유저</h1>
     <tr>
-        <th>ID</th>
-        <th>Nick</th>
-        <th>Email</th>
-        <th>Hashed Password</th>
+        <th>id</th>
+        <th>name</th>
+        <th>email</th>
+        <th>password</th>
+        <th>introduction</th>
+        <th>profile_url</th>
     </tr>
     {% for user in users %}
     <tr>
         <td>{{ user.id }}</td>
-        <td>{{ user.nick }}</td>
+        <td>{{ user.name }}</td>
         <td>{{ user.email }}</td>
         <td>{{ user.password }}</td>
+        <td>{{ user.introduction }}</td>
+        <td>{{ user.profile_url }}</td>
     </tr>
     {% endfor %}
 </table>
@@ -99,14 +103,15 @@
 <table class="table">
     <h1 class="text-center my-5">게시글</h1>
     <tr>
-        <th>ID</th>
+        <th>id</th>
         <th>title</th>
         <th>description</th>
         <th>thumbnail_url</th>
         <th>path</th>
         <th>Created_at</th>
-        <th>User ID</th>
-        <th>Category_2 ID</th>
+        <th>UserID</th>
+        <th>MaincategoryID</th>
+        <th>SubcategoryID</th>
         <th>Action</th>
     </tr>
     {% for post in posts %}
@@ -118,7 +123,8 @@
         <td>{{ post.path }}</td>
         <td>{{ post.createdAt }}</td>
         <td>{{ post.UserId }}</td>
-        <td>{{ post.Category2Id }}</td>
+        <td>{{ post.MaincategoryId }}</td>
+        <td>{{ post.SubcategoryId }}</td>
         <td>
             <button class="btn btn-warning" onclick="updatePost('{{ post.id | escape }}')">Update</button>
             <button class="btn btn-danger" onclick="deletePost('{{ post.id | escape }}')">Delete</button>
@@ -169,7 +175,8 @@
         <th>path</th>
         <th>Created_at</th>
         <th>User ID</th>
-        <th>Category_2 ID</th>
+        <th>MaincategoryId</th>
+        <th>SubcategoryId</th>
     </tr>
     {% for deleted_post in deleted_posts %}
     <tr>
@@ -180,7 +187,8 @@
         <td>{{ deleted_post.path }}</td>
         <td>{{ deleted_post.createdAt }}</td>
         <td>{{ deleted_post.UserId }}</td>
-        <td>{{ deleted_post.Category2Id }}</td>
+        <td>{{ deleted_post.MaincategoryId }}</td>
+        <td>{{ deleted_post.SubcategoryId }}</td>
     </tr>
     {% endfor %}
 </table>
@@ -202,18 +210,18 @@
         console.log("Selected value:", value);
     }
 
-    const category1_form = document.querySelector('#category1_form');
-    category1_form.addEventListener('submit', (event) => {
+    const main_category_form = document.querySelector('#main_category_form');
+    main_category_form.addEventListener('submit', (event) => {
         event.preventDefault();
 
-        const name_input = category1_form.querySelector('#name_input');
+        const name_input = main_category_form.querySelector('#name_input');
         const name = name_input.value;
 
         if (!name) {
             alert('이름 입력하세요');
             return;
         }
-        axios.post('/category_db/createCategory_1', { name })
+        axios.post('/category_db/createMaincategory', { name })
             .then(response => {
                 console.log(response.data);
                 window.location.href = "/tables/database";
@@ -224,14 +232,14 @@
             });
     });
 
-    const category2_form = document.querySelector('#category2_form');
-    category2_form.addEventListener('submit', (event) => {
+    const sub_category_form = document.querySelector('#sub_category_form');
+    sub_category_form.addEventListener('submit', (event) => {
         event.preventDefault();
 
-        const parent_category_input = category2_form.querySelector('#parent_category_input');
+        const parent_category_input = sub_category_form.querySelector('#parent_category_input');
         const parent_category_id = parent_category_input.value;
 
-        const name_input = category2_form.querySelector('#name_input');
+        const name_input = sub_category_form.querySelector('#name_input');
         const name = name_input.value;
 
         if (!name) {
@@ -242,7 +250,7 @@
             return;
         };
 
-        axios.post('/category_db/createCategory_2', { parent_category_id, name })
+        axios.post('/category_db/createSubcategory', { parent_category_id, name })
             .then(response => {
                 console.log(response.data);
                 window.location.href = "/tables/database";
@@ -267,9 +275,9 @@
         }
     };
 
-    const deleteCategory_1 = async (id) => {
+    const deleteMaincategory = async (id) => {
         try {
-            await axios.delete('/category_db/deleteCategory_1/' + id);
+            await axios.delete('/category_db/deleteMaincategory/' + id);
             // After the post has been deleted, you can reload the page or remove the row from the table without reloading the page.
             location.reload();
         } catch (error) {
@@ -277,9 +285,9 @@
         }
     };
 
-    const deleteCategory_2 = async (id) => {
+    const deleteSubcategory = async (id) => {
         try {
-            await axios.delete('/category_db/deleteCategory_2/' + id);
+            await axios.delete('/category_db/deleteSubcategory/' + id);
             // After the post has been deleted, you can reload the page or remove the row from the table without reloading the page.
             location.reload();
         } catch (error) {

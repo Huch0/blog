@@ -11,6 +11,8 @@
 const urlParams = new URLSearchParams(window.location.search);
 const postId = urlParams.get('postId');
 let category_ids = {};
+let tables = {};
+
 window.onload = () => {
     if (postId) {
         axios.get(`/post_db/edit/${postId}`)
@@ -31,6 +33,7 @@ window.onload = () => {
             })
             .catch(error => console.error(error));
     }
+    make_tables();
 
     axios.get('/category_db/category_dropdown')
         .then(response => {
@@ -248,7 +251,7 @@ if (submit_btn) {
 
         const title_input = document.querySelector("#title_input").value;
         const description_input = document.querySelector("#description_input").value;
-        const category = document.querySelector('#category_dropdown').innerHTML;
+        const sub_category_name = document.querySelector('#category_dropdown').innerHTML;
 
         if (!title_input) {
             alert('제목 채우세요');
@@ -256,30 +259,30 @@ if (submit_btn) {
         } else if (!description_input) {
             alert('설명 채우세요');
             return;
-        } else if (category == 'Category') {
+        } else if (sub_category_name == 'Category') {
             alert('카테고리 고르세요');
             return;
         }
-        //console.log('category : ', category);
-        const category2_id = category_ids[category];
+        const main_category_id = findMainCategoryId(tables.category_table, sub_category_name).toString();
+        const sub_category_id = category_ids[sub_category_name];
 
         try {
             const thumbnail_url = document.querySelector("#prev_thumbnail img").src;
 
-            console.log(title_input, description_input, thumbnail_url, category, category2_id);
-
+            console.log(title_input, description_input, thumbnail_url, main_category_id, sub_category_name, sub_category_id);
             // Get the data from the CKEditor 5 instance
             const editor_content = ckeditor.getData();
             // Find all <h> tags and add an id attribute with the text content
-            const modifiedContent = editor_content.replace(/<h([1-6])>([^<]+)<\/h\1>/g, function (match, tagLevel, tagText) {
+            const modifiedContent = editor_content.replace(/<h([1-6])([^>]*)>([^<]+)<\/h\1>/g, function (match, tagLevel, tagAttributes, tagText) {
                 const idText = tagText.trim().replace(/\s+/g, '-'); // Convert tag text to id format
-                return `<h${tagLevel} id="${idText}">${tagText}</h${tagLevel}>`;
+                const modifiedTag = `<h${tagLevel}${tagAttributes} id="${idText}">${tagText}</h${tagLevel}>`;
+                return modifiedTag;
             });
 
-            console.log(modifiedContent);
+            //console.log(modifiedContent);
 
             // Send the data to the server
-            sendDataToServer(title_input, description_input, thumbnail_url, category2_id, modifiedContent);
+            sendDataToServer(title_input, description_input, thumbnail_url, main_category_id, sub_category_id, modifiedContent);
         } catch (error) {
             if (!document.querySelector("#prev_thumbnail img")) {
                 alert('썸네일 고르세요');
@@ -292,13 +295,14 @@ if (submit_btn) {
 }
 
 
-function sendDataToServer(title_input, description_input, thumbnail_url, category2_id, editor_content) {
+function sendDataToServer(title_input, description_input, thumbnail_url, main_category_id, sub_category_id, editor_content) {
     const formData = new FormData();
     console.log(editor_content);
     formData.append('title', title_input);
     formData.append('description', description_input);
     formData.append('thumbnail_url', thumbnail_url);
-    formData.append('category2_id', category2_id);
+    formData.append('main_category_id', main_category_id);
+    formData.append('sub_category_id', sub_category_id);
     formData.append('content', editor_content);
     axios.post('/post_db/', formData)
         .then((res) => {
@@ -320,7 +324,7 @@ if (edit_btn) {
 
         const title_input = document.querySelector("#title_input").value;
         const description_input = document.querySelector("#description_input").value;
-        const category = document.querySelector('#category_dropdown').innerHTML;
+        const sub_category_name = document.querySelector('#category_dropdown').innerHTML;
 
         if (!title_input) {
             alert('제목 채우세요');
@@ -328,23 +332,30 @@ if (edit_btn) {
         } else if (!description_input) {
             alert('설명 채우세요');
             return;
-        } else if (category == 'Category') {
+        } else if (sub_category_name == 'Category') {
             alert('카테고리 고르세요');
             return;
         }
-        //console.log('category : ', category);
-        const category2_id = category_ids[category];
+
+        const main_category_id = findMainCategoryId(sub_category_name);
+        const sub_category_id = category_ids[sub_category_name];
 
         try {
             const thumbnail_url = document.querySelector("#prev_thumbnail img").src;
 
-            console.log(title_input, description_input, thumbnail_url, category, category2_id);
+            console.log(title_input, description_input, thumbnail_url, main_category_id, sub_category_name, sub_category_id);
 
             // Get the data from the CKEditor 5 instance
             const editor_content = ckeditor.getData();
 
+            const modifiedContent = editor_content.replace(/<h([1-6])([^>]*)>([^<]+)<\/h\1>/g, function (match, tagLevel, tagAttributes, tagText) {
+                const idText = tagText.trim().replace(/\s+/g, '-'); // Convert tag text to id format
+                const modifiedTag = `<h${tagLevel}${tagAttributes} id="${idText}">${tagText}</h${tagLevel}>`;
+                return modifiedTag;
+            });
+
             // Send the data to the server
-            updatePost(postId, title_input, description_input, thumbnail_url, category2_id, editor_content);
+            updatePost(postId, title_input, description_input, thumbnail_url, main_category_id, sub_category_id, modifiedContent);
         } catch (error) {
             if (!document.querySelector("#prev_thumbnail img")) {
                 alert('썸네일 고르세요');
@@ -356,13 +367,14 @@ if (edit_btn) {
 }
 
 // Update Post
-const updatePost = async (postId, title_input, description_input, thumbnail_url, category2_id, editor_content) => {
+const updatePost = async (postId, title_input, description_input, thumbnail_url, main_category_id, sub_category_id, editor_content) => {
     try {
         const response = await axios.put(`/post_db/update/${postId}`, {
             title: title_input,
             description: description_input,
             thumbnail_url: thumbnail_url,
-            category2_id: category2_id,
+            MaincategoryId: main_category_id,
+            SubcategoryId: sub_category_id,
             content: editor_content
         });
         console.log(response.data);
@@ -374,11 +386,3 @@ const updatePost = async (postId, title_input, description_input, thumbnail_url,
     }
 };
 
-const dbUpdates = {
-    title: "New Title",
-    description: "New Description"
-};
-const contentUpdates = {
-    currentString: "Old Title",
-    newString: "New Title"
-};

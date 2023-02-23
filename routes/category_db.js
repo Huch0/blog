@@ -1,24 +1,24 @@
 const express = require('express');
 const router = express.Router();
 
-const Category_1 = require('../models/category_1');
-const Category_2 = require('../models/category_2');
+const Maincategory = require('../models/main_category');
+const Subcategory = require('../models/sub_category');
 
 
-const createCategory_1 = async (name) => {
+const createMaincategory = async (name) => {
   try {
-    await Category_1.create({
+    await Maincategory.create({
       name: name
     });
-    console.log('Category_1 created successfully');
+    console.log('Maincategory created successfully');
   } catch (error) {
     console.error(error);
   }
 };
 
-router.post('/createCategory_1', async (req, res) => {
+router.post('/createMaincategory', async (req, res) => {
   try {
-    createCategory_1(req.body.name);
+    createMaincategory(req.body.name);
     res.redirect('/tables/database');
   } catch (error) {
     console.error(error);
@@ -26,89 +26,89 @@ router.post('/createCategory_1', async (req, res) => {
   }
 });
 
-router.delete('/deleteCategory_1/:id', async (req, res, next) => {
-  const category_1Id = req.params.id;
+router.delete('/deleteMaincategory/:id', async (req, res, next) => {
+  const MaincategoryId = req.params.id;
 
   try {
-    const result = await Category_1.destroy({ where: { id: category_1Id } });
+    const result = await Maincategory.destroy({ where: { id: MaincategoryId } });
     if (result) {
       return res.status(200).json({
-        message: 'The category1 was deleted successfully.'
+        message: 'The Maincategory was deleted successfully.'
       });
     } else {
       return res.status(404).json({
-        message: 'The category1 could not be found.'
+        message: 'The Maincategory could not be found.'
       });
     }
   } catch (error) {
     return res.status(500).json({
-      message: 'An error occurred while trying to delete the category1.'
+      message: 'An error occurred while trying to delete the Maincategory.'
     });
   }
 });
 
-const createCategory_2 = async (parent_category_id, name) => {
+const createSubcategory= async (parent_category_id, name) => {
   try {
-    await Category_2.create({
-      Category1Id: parent_category_id,
+    await Subcategory.create({
+      MaincategoryId: parent_category_id,
       name: name
     });
-    console.log('Category_2 created successfully');
+    console.log('Subcategory created successfully');
   } catch (error) {
     console.error(error);
   }
 };
 
-router.post('/createCategory_2', async (req, res) => {
+router.post('/createSubcategory', async (req, res) => {
   try {
-    createCategory_2(req.body.parent_category_id, req.body.name);
+    createSubcategory(req.body.parent_category_id, req.body.name);
     res.redirect('/tables/database');
   } catch (error) {
     console.error(error);
-    res.status(500).send('Failed to create Category');
+    res.status(500).send('Failed to create Subcategory');
   }
 });
 
-router.delete('/deleteCategory_2/:id', async (req, res, next) => {
-  const category_2Id = req.params.id;
+router.delete('/deleteSubcategory/:id', async (req, res, next) => {
+  const SubcategoryId = req.params.id;
 
   try {
-    const result = await Category_2.destroy({ where: { id: category_2Id } });
+    const result = await Subcategory.destroy({ where: { id: SubcategoryId } });
     if (result) {
       return res.status(200).json({
-        message: 'The category2 was deleted successfully.'
+        message: 'The Subcategory was deleted successfully.'
       });
     } else {
       return res.status(404).json({
-        message: 'The category2 could not be found.'
+        message: 'The Subcategory could not be found.'
       });
     }
   } catch (error) {
     return res.status(500).json({
-      message: 'An error occurred while trying to delete the category2.'
+      message: 'An error occurred while trying to delete the Subcategory.'
     });
   }
 });
 
 router.get('/category_table', async (req, res) => {
   try {
-    const categories_1 = await Category_1.findAll();
-    const categories_2 = await Category_2.findAll();
+    const main_categories = await Maincategory.findAll();
+    const sub_categories = await Subcategory.findAll();
 
     const all_categories = {};
 
-    categories_1.forEach(category_1 => {
-      const category2_table = {};
+    main_categories.forEach(main_category => {
+      const sub_category_table = {};
 
-      categories_2.forEach(category_2 => {
-        if (category_2.Category1Id === category_1.id) {
-          category2_table[category_2.id] = category_2.name;
+      sub_categories.forEach(sub_category => {
+        if (sub_category.MaincategoryId === main_category.id) {
+          sub_category_table[sub_category.id] = sub_category.name;
         }
       });
 
-      all_categories[category_1.id] = {
-        name: category_1.name,
-        category2_table: category2_table
+      all_categories[main_category.id] = {
+        name: main_category.name,
+        sub_category_table
       };
     });
 
@@ -116,28 +116,28 @@ router.get('/category_table', async (req, res) => {
     res.json(all_categories);
   } catch (error) {
     console.error(error);
-    res.status(500).send('Failed to get all category1');
+    res.status(500).send('Failed to get all main_category');
   }
 });
 
 router.get('/category_dropdown', async (req, res) => {
   try {
     console.log('Category_dropdown router');
-    const categories1 = await Category_1.findAll();
+    const main_categories = await Maincategory.findAll();
     let generated_menu = '';
     let generated_ids = {};
 
-    for (const category1 of categories1) {
-      generated_menu += make_category1_option(category1);
+    for (const main_category of main_categories) {
+      generated_menu += make_main_category_option(main_category);
 
-      const categories2 = await Category_2.findAll({ where: { Category1Id: category1.id } });
+      const sub_categories = await Subcategory.findAll({ where: { MaincategoryId: main_category.id } });
 
-      let category_2_options = [];
-      for (const category2 of categories2) {
-        category_2_options.push(make_category2_option(category2));
-        generated_ids[category2.name] = category2.id;
+      let sub_category_options = [];
+      for (const sub_category of sub_categories) {
+        sub_category_options.push(make_sub_category_option(sub_category));
+        generated_ids[sub_category.name] = sub_category.id;
       }
-      generated_menu += category_2_options.join('');
+      generated_menu += sub_category_options.join('');
     }
 
     res.json({ generated_menu, generated_ids });
@@ -147,13 +147,14 @@ router.get('/category_dropdown', async (req, res) => {
   }
 });
 
-function make_category1_option(category1) {
-  const option = `<li class="dropdown-item">${category1.name}</li>`;
+
+function make_main_category_option(main_category) {
+  const option = `<li class="dropdown-item">${main_category.name}</li>`;
   return option;
 }
 
-function make_category2_option(category2) {
-  const option = `<li><a class="dropdown-item" href="#" onclick="changeValue('${category2.name}')">- ${category2.name}</a></li>`;
+function make_sub_category_option(sub_category) {
+  const option = `<li><a class="dropdown-item" href="#" onclick="changeValue('${sub_category.name}')">- ${sub_category.name}</a></li>`;
   return option;
 }
 

@@ -3,8 +3,8 @@ const env = process.env.NODE_ENV || 'development';
 const config = require('../config/config')[env];
 const User = require('./user');
 const Post = require('./post');
-const Category_1 = require('./category_1');
-const Category_2 = require('./category_2');
+const Maincategory = require('./main_category');
+const Subcategory = require('./sub_category');
 
 const db = {};
 const sequelize = new Sequelize(
@@ -14,17 +14,17 @@ const sequelize = new Sequelize(
 db.sequelize = sequelize;
 db.User = User;
 db.Post = Post;
-db.Category_1 = Category_1;
-db.Category_2 = Category_2;
+db.Maincategory = Maincategory;
+db.Subcategory = Subcategory;
 
 User.init(sequelize);
 Post.init(sequelize);
-Category_1.init(sequelize);
-Category_2.init(sequelize);
+Maincategory.init(sequelize);
+Subcategory.init(sequelize);
 
 User.associate(db);
 Post.associate(db);
-Category_1.associate(db);
-Category_2.associate(db);
+Maincategory.associate(db);
+Subcategory.associate(db);
 
 module.exports = db;

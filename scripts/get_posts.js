@@ -34,35 +34,23 @@ const get_posts = (searchType, searchTerm, numberOfResults, page) => {
             });
     });
 };
-function createDiv(path, imgSrc, Category2Id, title, description, UserId, date, views) {
-    const author = tables.user_table[UserId];
+function createDiv(post) {
+    const author = tables.user_table[post.UserId];
+    const date = format_date(post.createdAt);
     console.log('tables : ', tables);
 
-    const searchCategoryId = Category2Id; 
-    const categoryTable = tables.category_table;
-    let categoryName1, categoryName2;
-
-    for (const key in categoryTable) {
-        if (Object.hasOwnProperty.call(categoryTable, key)) {
-            const category1 = categoryTable[key];
-            const category2Table = category1.category2_table;
-            if (Object.keys(category2Table).includes(searchCategoryId.toString())) {
-                categoryName1 = category1.name;
-                categoryName2 = category2Table[searchCategoryId];
-                break;
-            }
-        }
-    }
-    const category = categoryName1 + ' / ' + categoryName2;
+    const main_category = post.MaincategoryId ? tables.category_table[post.MaincategoryId].name : null;
+    const sub_category = findSubCategoryNameById(tables.category_table, post.SubcategoryId);
+    const category = main_category + ' / ' + sub_category;
 
     return `
         <div class="card p-0 m-4" style="width: 20rem;">
-            <a class="nav-link" href="/${path}">
-                <img src="${imgSrc}" class="card-img-top" alt="thumbnail" style="height: 180px;">
+            <a class="nav-link" href="/${post.path}">
+                <img src="${post.thumbnail_url}" class="card-img-top" alt="thumbnail" style="height: 180px;">
                 <div class="card-body">
                     <p id="cat_text" class="card-text mb-2 text-muted">${category}</p>
-                    <h5 id="title_text" class="card-title">${title}</h5>
-                    <p id="description_text" class="card-text">${description}</p>
+                    <h5 id="title_text" class="card-title">${post.title}</h5>
+                    <p id="description_text" class="card-text">${post.description}</p>
                     <p id="author_text" class="card-text mb-2 text-muted">by ${author} - ${date}</p>
                 </div>
             </a>

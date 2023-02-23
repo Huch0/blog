@@ -12,7 +12,7 @@ router.get('/user_table', async (req, res) => {
     const users = await User.findAll();
     const user_table = {};
     users.forEach(user => {
-        user_table[user.id] = user.nick;
+        user_table[user.id] = user.name;
     });
     res.json(user_table);
 });

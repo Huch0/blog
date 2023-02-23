@@ -15,7 +15,35 @@ const make_tables = () => {
         });
     }
 };
+function findSubCategoryNameById(categoryTable, subcategoryId) {
+    for (const mainCategoryId in categoryTable) {
+        const subCategories = categoryTable[mainCategoryId].sub_category_table;
+        if (subcategoryId in subCategories) {
+            return subCategories[subcategoryId];
+        }
+    }
+    return null; // subcategory ID not found in category table
+}
 
+function findMainCategoryName(categoryTable, subcategoryId) {
+    const mainCategoryId = findMainCategoryId(subcategoryId);
+    if (mainCategoryId) {
+        return categoryTable[mainCategoryId].name;
+    }
+    return null; // subcategory ID or value not found in category table
+}
+
+function findMainCategoryId(categoryTable, subcategoryId) {
+    for (const mainCategoryId in categoryTable) {
+        const subCategories = categoryTable[mainCategoryId].sub_category_table;
+        for (const subCategoryId in subCategories) {
+            if (subCategoryId === subcategoryId || subCategories[subCategoryId] === subcategoryId) {
+                return mainCategoryId;
+            }
+        }
+    }
+    return null; // subcategory ID or value not found in category table
+}
 const get_category_user = () => {
     return new Promise((resolve, reject) => {
         const tables = {};
