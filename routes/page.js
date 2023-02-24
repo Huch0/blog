@@ -93,7 +93,6 @@ router.get('/home/:main_category', async (req, res) => {
 });
 
 router.get('/editor/:type', isLoggedIn, (req, res) => {
-
     const type = req.params.type;
     if (type === 'edit') {
         res.render('editor', { title: 'edit' });
@@ -131,7 +130,7 @@ router.get('/post/:id', async (req, res) => {
       title: post.title, 
       main_category: main_category.name,
       description: post.description, 
-      thumbnail_url: post.thumbnail_url, 
+      thumbnail_url: '.' + post.thumbnail_url,
       post_path: './posts/' + post_id + '.html',
       prev_post,
       next_post

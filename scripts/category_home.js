@@ -107,7 +107,7 @@ const make_posts_cards = () => {
     for (let i = 0; i < res_posts.length; i++) {
         const post = res_posts[i];
         console.log('post', post);
-        cardsHtml += createDiv(post);
+        cardsHtml += createDiv_in_category_home(post);
     }
     if (!cardsHtml) {
         search_result.innerHTML =
@@ -205,3 +205,28 @@ function changeValue(value) {
     btn.innerHTML = value;
     console.log("Selected value:", value);
 }
+
+
+function createDiv_in_category_home(post) {
+    const author = tables.user_table[post.UserId];
+    const date = format_date(post.createdAt);
+    console.log('tables : ', tables);
+
+    const main_category = post.MaincategoryId ? tables.category_table[post.MaincategoryId].name : null;
+    const sub_category = findSubCategoryNameById(tables.category_table, post.SubcategoryId);
+    const category = main_category + ' / ' + sub_category;
+
+    return `
+        <div class="card p-0 m-4" style="width: 20rem;">
+            <a class="nav-link" href="/${post.path}">
+                <img src=".${post.thumbnail_url}" class="card-img-top" alt="thumbnail" style="height: 180px;">
+                <div class="card-body">
+                    <p id="cat_text" class="card-text mb-2 text-muted">${category}</p>
+                    <h5 id="title_text" class="card-title">${post.title}</h5>
+                    <p id="description_text" class="card-text">${post.description}</p>
+                    <p id="author_text" class="card-text mb-2 text-muted">by ${author} - ${date}</p>
+                </div>
+            </a>
+        </div>
+    `;
+};

@@ -267,7 +267,8 @@ if (submit_btn) {
         const sub_category_id = category_ids[sub_category_name];
 
         try {
-            const thumbnail_url = document.querySelector("#prev_thumbnail img").src;
+            const thumbnail_str = document.querySelector("#prev_thumbnail img").src;
+            const thumbnail_url = thumbnail_str.replace(/.*\/img\//, './img/');
 
             console.log(title_input, description_input, thumbnail_url, main_category_id, sub_category_name, sub_category_id);
             // Get the data from the CKEditor 5 instance
@@ -341,7 +342,8 @@ if (edit_btn) {
         const sub_category_id = category_ids[sub_category_name];
 
         try {
-            const thumbnail_url = document.querySelector("#prev_thumbnail img").src;
+            const thumbnail_str = document.querySelector("#prev_thumbnail img").src;
+            const thumbnail_url = thumbnail_str.replace(/.*\/img\//, './img/');
 
             console.log(title_input, description_input, thumbnail_url, main_category_id, sub_category_name, sub_category_id);
 

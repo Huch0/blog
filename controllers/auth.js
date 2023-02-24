@@ -20,6 +20,7 @@ exports.join = async (req, res, next) => {
     return res.redirect('/');
   } catch (error) {
     console.error(error);
+    logger.error(error);
     return next(error);
   }
 }
@@ -28,6 +29,7 @@ exports.login = (req, res, next) => {
   passport.authenticate('local', (authError, user, info) => {
     if (authError) {
       console.error(authError);
+      logger.error(authError);
       return next(authError);
     }
     if (!user) {
@@ -36,6 +38,7 @@ exports.login = (req, res, next) => {
     return req.login(user, (loginError) => {
       if (loginError) {
         console.error(loginError);
+        logger.error(loginError);
         return next(loginError);
       }
       return res.redirect('/');

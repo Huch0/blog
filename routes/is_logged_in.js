@@ -1,4 +1,7 @@
+const logger = require('../logger');
+
 exports.isLoggedIn = (req, res, next) => {
+    //logger.info(req);
     if (req.isAuthenticated()) {
         next();
     } else {
